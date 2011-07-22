@@ -79,6 +79,9 @@ class UsersController extends AppController{
 		}
 	}
 	
+	/*
+	 * Admin functions ***********************************************
+	 */
 	
 	function admin_index(){
 		
@@ -112,6 +115,18 @@ class UsersController extends AppController{
 		$this->Auth->logout();
 		$this->Session->setFlash('You have successfully logged off!');
 		$this->redirect(array('controller' => 'carts', 'action' => 'index', 'admin' => false));
+	}
+	
+	
+	function admin_show_all_users(){
+	    //$result = $this->User->find('all');
+	    $this->set('users', $this->paginate());
+	}
+	
+	function admin_reset_password($userId){
+	    if(!$id){
+	        $this->Session->setFlash('Wrong user ID!');
+	    }
 	}
 	
 	

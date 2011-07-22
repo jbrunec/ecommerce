@@ -45,11 +45,20 @@
 			<?php echo $content_for_layout; ?>
 			<?php if($session->check('Auth.User.admin')){?>
     			<div class="actions">
-                	<h3>Actions</h3>
+                	<h3>Product related actions:</h3>
                 	<ul>           
-                		<li><?php echo $this->Html->link('Logout', array('controller' => 'users','action' => 'admin_logout', 'admin' => true));?></li>
                 		<li><?php echo $this->Html->link('Add new product', array('controller' => 'products','action' => 'admin_add_product', 'admin' => true));?></li>
                 		<li><?php echo $this->Html->link('Show all products', array('controller' => 'products','action' => 'admin_show_all_products', 'admin' => true));?></li>
+                	</ul>
+                	<br></br>           	
+                	<h3>Users related actions: </h3>
+                	<ul>
+                		<li><?php echo $html->link('Show all registered users', array('controller' => 'users', 'action' => 'admin_show_all_users'));?></li>
+                	</ul>
+                	<br></br>
+                	<h3>Admin: </h3>
+                	<ul>
+						<li><?php echo $this->Html->link('Logout', array('controller' => 'users','action' => 'admin_logout', 'admin' => true));?></li>           	
                 	</ul>
     			</div>
 			<?php }?>

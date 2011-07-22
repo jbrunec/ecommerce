@@ -93,7 +93,7 @@ class ProductsController extends AppController{
 		    }
 		}
 		
-	$categories = $this->Product->Category->find('list',array('fields' => array('Category.id','Category.cat_name','Category.cat_parent_id')));
+	$categories = $this->Product->Category->find('list',array('fields' => array('Category.id','Category.cat_name','Category.cat_parent_id'), 'order' => array('Category.cat_parent_id ASC')));
 	//$subCategories = $this->Product->Category->find('list', array('fields' => array('Category.cat_parent_id')));
 	//pr($subCategories);
 	$this->set(compact('categories'));
@@ -130,8 +130,23 @@ class ProductsController extends AppController{
 		$this->set(compact('categories'));
 	}
 	
+	
+	function admin_delete_product($id = null){
+		if (!$id) {
+			$this->Session->setFlash('Invalid id for a product');
+			$this->redirect(array('action'=>'admin_show_all_products'));
+		}
+		if ($this->Product->delete($id)) {
+			$this->Session->setFlash('Product was deleted successfully!');
+			$this->redirect(array('action'=>'admin_show_all_products'));
+		}
+		$this->Session->setFlash('Product was not deleted!');
+		$this->redirect(array('action' => 'admin_show_all_products'));
+	 
+	}
+	
 	function admin_show_all_products(){
-		$this->paginate = array('limit' => 3);
+		$this->paginate = array('limit' => 5);
 		//$products = $this->Product->find('all');
 		$this->set('products', $this->paginate());
 	}
@@ -178,11 +193,13 @@ class ProductsController extends AppController{
 	    $path = "img\\products\\";
 	    $dir = WWW_ROOT.$path;
 	    
+	    //trenutna lokacija slike
 	    $image = $this->data['Product']['file']['tmp_name'];
 	    $imageName = $this->data['Product']['file']['name'];
 	    $file = new File($image);
-	    $ext = $file->ext();
 	    
+	    //preverjanje koncnic za sliko
+	    $ext = $file->ext();	    
 	    if($ext != 'jpg' || $ext != 'jpeg' || $ext != 'png' || $ext != 'gif'){
 	        
 	        return false;
@@ -191,10 +208,12 @@ class ProductsController extends AppController{
 	    $fileData = $file->read();
 	    $file->close();
 	    
+	    //zapis v nov fajl
 	    $file = new File($dir.$imageName,true);
 	    $file->write($fileData);
 	    $file->close();
 	    
+	    //nastavitev pd_image na ime slike (ker je se vedno array())
 	    $this->data['Product']['pd_image'] = $imageName;
 	    return true;
 	}
