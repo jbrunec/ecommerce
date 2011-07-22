@@ -27,7 +27,6 @@
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
-
 		echo $this->Html->css('cake.generic');
 		echo $html->script('tiny_mce/tiny_mce');
 		echo $scripts_for_layout;
@@ -41,9 +40,19 @@
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>
+			<?php echo $this->Session->flash('auth');?>
 
 			<?php echo $content_for_layout; ?>
-
+			<?php if($session->check('Auth.User.admin')){?>
+    			<div class="actions">
+                	<h3>Actions</h3>
+                	<ul>           
+                		<li><?php echo $this->Html->link('Logout', array('controller' => 'users','action' => 'admin_logout', 'admin' => true));?></li>
+                		<li><?php echo $this->Html->link('Add new product', array('controller' => 'products','action' => 'admin_add_product', 'admin' => true));?></li>
+                		<li><?php echo $this->Html->link('Show all products', array('controller' => 'products','action' => 'admin_show_all_products', 'admin' => true));?></li>
+                	</ul>
+    			</div>
+			<?php }?>
 		</div>
 		<div id="footer">
 			<?php echo $this->Html->link(

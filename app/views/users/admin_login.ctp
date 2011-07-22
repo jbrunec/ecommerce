@@ -1,4 +1,5 @@
 <?php debug($session->read())?>
+
 <h2>ADMIN LOGIN PAGE</h2>
 <?php 
 	echo $this->Session->flash('auth');

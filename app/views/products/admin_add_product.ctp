@@ -8,12 +8,7 @@
     }); 
 </script>
 <div class="products form">
-<?php 
-	$this->Html->scriptStart(array('inline' => true));	
-	
-	$this->Html->scriptEnd();
-	
-?>
+
 <?php echo $this->Form->create('Product');?>
 	<fieldset>
  		<legend>Add product</legend>
@@ -24,7 +19,8 @@
 		echo $this->Form->input('pd_qty');
 		echo $this->Form->hidden('pd_date', array('value' => $time->format('Y-m-d H:i:s', time())));
 		echo $this->Form->input('Category');
-		
+		/*$options = $categories;
+		echo $this->Form->select('Category', $options, NULL);*/
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

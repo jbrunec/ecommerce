@@ -1,4 +1,5 @@
 <?php
+App::import('File');
 class ProductsController extends AppController{
 	var $name = 'Products';
 	//var $helpers = array('Paginator');
@@ -77,16 +78,24 @@ class ProductsController extends AppController{
 	
 	function admin_add_product(){
 		if(!empty($this->data)){
-			$this->Product->create();
-			if($this->Product->save($this->data)){
-				$this->Session->setFlash('Product was saved successfully!');
-			}else{
-				$this->Session->setFlash('The product could not be saved');
-			}
+		    if(!$this->admin_upload_photo()){
+		        //$this->Product->invalidate('file','isUploaded');
+		        $this->Session->setFlash('Incorrect file type');
+		        //$this->render();
+		    }else{
+    			$this->Product->create();
+    			//$this->data['Product']['pd_image'] = $this->data['Product']['pd_image']['name'];
+    			if($this->Product->save($this->data)){
+    				$this->Session->setFlash('Product was saved successfully!');
+    			}else{
+    				$this->Session->setFlash('The product could not be saved');
+    			}
+		    }
 		}
 		
-	$categories = $this->Product->Category->find('list',array('fields' => array('Category.id','Category.cat_name')));
-	
+	$categories = $this->Product->Category->find('list',array('fields' => array('Category.id','Category.cat_name','Category.cat_parent_id')));
+	//$subCategories = $this->Product->Category->find('list', array('fields' => array('Category.cat_parent_id')));
+	//pr($subCategories);
 	$this->set(compact('categories'));
 	}
 	
@@ -96,14 +105,23 @@ class ProductsController extends AppController{
 			$this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 		}
 		if (!empty($this->data)) {
-			if ($this->Post->save($this->data)) {
-				$this->Session->setFlash('Product has been edited successfully');
-				$this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
-			} else {
-				$this->Session->setFlash('Product could not be edited!');
-			}
+		    if(!$this->admin_upload_photo()){
+		        //$this->Product->invalidate('file','isUploaded');
+		        $this->Session->setFlash('Incorrect file type');
+		        //$this->render();
+		    }else{
+		        //$this->data['Product']['pd_last_update'] = date('Y-m-d H:i:s', time());
+			    if ($this->Product->save($this->data)) {
+				    $this->Session->setFlash('Product has been edited successfully');
+				    $this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
+			    } else {
+				    $this->Session->setFlash('Product could not be edited!');
+			    }
+		    }
+		   
 		}
 		if (empty($this->data)) {
+		    $this->Product->recursive = 1;
 			$this->data = $this->Product->read(null, $id);
 		}
 		
@@ -118,5 +136,67 @@ class ProductsController extends AppController{
 		$this->set('products', $this->paginate());
 	}
 	
+	/*
+	function admin_upload_photo($file = null){
+    	$path = "/img/products/";
+        $dir = getcwd().$path;
+        $avatarFile = "$dir$id.png";
+
+        if (isset($this->data['Product']['pd_image']) && $this->data['Product']['pd_image']['error'] == 0) {
+            $image = $this->data['Product']['pd_image'];
+
+            if (in_array($image['type'], array('image/jpeg','image/pjpeg','image/png'))) {
+
+                // load image
+                list($width,  $height) = getimagesize($image['tmp_name']);
+                $width = $height = min($width, $height);
+
+                if (in_array($image['type'], array('image/jpeg','image/pjpeg')))
+                    $source = imagecreatefromjpeg($image['tmp_name']);
+                else
+                    $source = imagecreatefrompng($image['tmp_name']);
+
+                // resize
+                $thumb = imagecreatetruecolor(128, 128);
+                imagecopyresized($thumb,  $source,  0,  0,  0,  0,  128,  128,  $width,  $height);
+
+                // save resized & unlink upload
+                imagepng($thumb, $avatarFile);
+
+                $success = true;
+            } else {
+                $this->Product->invalidate('pd_image', __("Only JPG or PNG accepted.",true));
+                $success = false;
+            }
+
+            unlink($image['tmp_name']); // Delete upload in any case
+        }
+        
+        //return $success;
+	}*/
+	function admin_upload_photo($file = null){
+	    $path = "img\\products\\";
+	    $dir = WWW_ROOT.$path;
+	    
+	    $image = $this->data['Product']['file']['tmp_name'];
+	    $imageName = $this->data['Product']['file']['name'];
+	    $file = new File($image);
+	    $ext = $file->ext();
+	    
+	    if($ext != 'jpg' || $ext != 'jpeg' || $ext != 'png' || $ext != 'gif'){
+	        
+	        return false;
+	    }
+	    
+	    $fileData = $file->read();
+	    $file->close();
+	    
+	    $file = new File($dir.$imageName,true);
+	    $file->write($fileData);
+	    $file->close();
+	    
+	    $this->data['Product']['pd_image'] = $imageName;
+	    return true;
+	}
 }
 ?>

@@ -102,9 +102,6 @@ class UsersController extends AppController{
 				//$this->admin_login();
 			}*/			
 			
-		}elseif(!$this->Auth->user('admin') && !empty($this->data)){
-			$this->Session->setFlash('For christ\'s sake, would you at least care to login in the right place, puny human!!!');
-		
 		}else{
 			$this->Session->setFlash('please login!');
 		}
