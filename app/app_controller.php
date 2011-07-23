@@ -2,7 +2,7 @@
 class AppController extends Controller{
 	
 	var $helpers = array('Form','Html','Session','Js','Paginator','Time');
-	var $components = array('Session','RequestHandler','Email','Auth');
+	var $components = array('Session','RequestHandler','MyEmail','Auth');
 	
 	//id kategorije v parametru
 	var $c;

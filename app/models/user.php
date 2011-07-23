@@ -17,8 +17,25 @@ class User extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
+		),/*
+		'Ticket' => array(
+			'className' => 'Ticket',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+	    )*/
 	);
+	
+	
+	
+		
 	
 	
 	var $validate = array(
@@ -44,8 +61,8 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
 				'message' => 'You cannot leave password blank!',
 				//'allowEmpty' => false,
 				//'required' => true,
@@ -54,6 +71,7 @@ class User extends AppModel {
 			),
 			'password_match' => array(
 				'rule' => array('comparePassword','password_confirm'),
+			    //'required' => true,
 				'message' => 'passwords do not match!'
 			),
 		),	
@@ -63,11 +81,26 @@ class User extends AppModel {
 	//v tem primeru se prenese input field 'password' torej je $check['password'] = vnosUsera
 	//$field je vnosno polje iz forme ki jo validiramo (confirm_password)
 	function comparePassword($check, $field){
-		if($check['password'] != $this->data['User'][$field]){
-			$this->invalidate($field, 'password do not match!');
-			return false;
-		}
-		
+	    if(isset($this->data) && !empty($this->data)){
+    		if($check['password'] != $this->data['User'][$field]){
+    			$this->invalidate($field, 'password do not match!');
+    			return false;
+    		}
+    		
+    		//se prozi takrat ko hocemo primerjat samo passworde in nimamo na voljo polja this->data (v primerih ko ne gre za registracijo)
+	    }else{
+	        if(empty($check) || empty($field)){
+	            $this->invalidate('password', 'You cannot leave password blank!');
+	            $this->invalidate('password_confirm', 'You cannot leave password confirmation blank!');
+    			return false;
+	        }
+	        elseif($check != $field){
+	            
+	            $this->invalidate('password_confirm', 'passwords do not match!');
+    			return false;
+	        }
+	    }
+	    
 		return true;
 	}
 	
@@ -76,6 +109,9 @@ class User extends AppModel {
                if(!empty($this->data[$this->alias]['password'])) {
                    $this->data[$this->alias]['password'] = Security::hash($this->data[$this->alias]['password'], null, true);
                 }
+        //se prozi ko v funkcijo podamo svoj podatek, ki ga zelimo hashat
+        }elseif(isset($data) && !empty($data)){
+            $data = Security::hash($data,null,true);
         }
  
         return $data;
@@ -85,15 +121,37 @@ class User extends AppModel {
     	$this->hashPasswords(null,true);
     	return true;
     }
-    /*
-    function beforeFind(){
-    	$this->hashPasswords(null,true);
-    }*/
+    
     
     function updateLastLogin($user_id){
     	$sql = "UPDATE users SET user_last_login = NOW() WHERE id = $user_id";
+    	
     	$this->query($sql);
     }
+    
+    
+    //za ponovno nastavitev passworda
+    function reset_password($userId, $data){
+        
+        
+        if($this->comparePassword($data['User']['password'], $data['User']['password_confirm'])){
+            pr('password comparison passed!');
+            
+            $password = $this->hashPasswords($data['User']['password']);
+            
+            $sql = "UPDATE users SET users.password = '$password' WHERE users.id = $userId";
+            
+            $this->query($sql);
+            return true;
+        }else{
+            pr('password comparison failed!');
+           
+            return false;
+        }
+        
+    }
+    
+    
 	
 	
 

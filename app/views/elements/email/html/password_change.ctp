@@ -1,0 +1,1 @@
+<?php echo 'Your password has been changed successfully changed to: <b>'.$changedPass.'</b>'?>

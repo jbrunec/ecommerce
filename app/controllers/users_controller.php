@@ -7,7 +7,7 @@ class UsersController extends AppController{
 	 * @var User
 	 */
 	var $User;
-	
+	//var $Ticket;
 	
 	function beforeFilter(){
 		parent::beforeFilter();		
@@ -15,7 +15,7 @@ class UsersController extends AppController{
 		
 		$this->Auth->autoRedirect = false;
 		//doseg za neregistrirane osebe
-		$this->Auth->allow('login','logout','register','admin_login');
+		$this->Auth->allow('login','logout','register','admin_login','reset_password','changeUserPassword');
 		if($this->Auth->user()){
 			//doseg za registrirane osebe
 			$this->Auth->allow('login','logout','index','register','admin_login');
@@ -28,7 +28,7 @@ class UsersController extends AppController{
 		
 		//$this->Auth->loginError = "false login credentials";
 		//s tem overridamo Auth komponento za User model, da lahko uvedemo svoj hashing paswordov
-		if($this->action == 'register'){
+		if($this->action == 'register' ){
 			$this->Auth->authenticate = $this->User;
 			
 		}
@@ -60,6 +60,7 @@ class UsersController extends AppController{
 	}
 	
 	function logout(){
+	    $this->Session->delete('Auth.User');
 		$this->Auth->logout();
 		$this->redirect(array('controller' => 'carts', 'action' => 'index'));
 	}
@@ -78,6 +79,26 @@ class UsersController extends AppController{
 			
 		}
 	}
+	
+	
+	function changeUserPassword(){    
+	    //argument UID pride iz ticket kontrolera ko user v mailu klikne na povezavo z appendanim unikatnim key-em
+	    if(empty($this->data)){
+	        //pr($this->passedArgs['uid']);
+	        $this->set('uid', $this->passedArgs['uid']);
+	    }elseif(!empty($this->data)){
+	        //$password = $this->data['User']['password'];
+	        //$sql = "UPDATE users SET users.password = '$password' WHERE users.id = $userId";
+	        if($this->User->reset_password(urldecode($this->passedArgs['uid']), $this->data)){
+	            $this->Session->setFlash('Password changed successfully!');
+	            $this->login();
+	        }else{
+	            $this->Session->setFlash('Password change failed!');
+	        }
+	    }
+	}
+	
+
 	
 	/*
 	 * Admin functions ***********************************************
@@ -98,7 +119,7 @@ class UsersController extends AppController{
 				$this->redirect(array('controller' => 'users', 'action' => 'admin_index', 'admin' => true));
 			}else{
 				$this->data['User']['password'] = '';
-				$this->Session->setFlash('For christ\'s sake, would you at least care to login in the right place, puny human!!!');
+				$this->Session->setFlash('For christ\'s sake, would you at least care to login at the right place, puny human!!!');
 			}
 			/*
 			if($this->Auth->login($this->data)){
@@ -123,9 +144,23 @@ class UsersController extends AppController{
 	    $this->set('users', $this->paginate());
 	}
 	
-	function admin_reset_password($userId){
-	    if(!$id){
-	        $this->Session->setFlash('Wrong user ID!');
+	function admin_reset_password(){
+	    
+	    $this->set('uid',$this->passedArgs['uid']);
+	    
+	    if(!empty($this->data)){
+	        $changedPass = $this->data['User']['password'];
+            
+            
+	        if($this->User->reset_password($this->passedArgs['uid'],$this->data)){
+	            $this->Session->setFlash('Password changed successfully!');
+	            
+	            $this->set('changedPass',$changedPass);
+	            $this->MyEmail->sendEmail();
+	            $this->redirect(array('action' => 'admin_show_all_users','admin' => true));
+	        }else{
+	            $this->Session->setFlash('Password change error!');
+	        }
 	    }
 	}
 	
