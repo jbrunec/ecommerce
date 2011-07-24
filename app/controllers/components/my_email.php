@@ -24,8 +24,22 @@ class MyEmailComponent extends Object{
     }
     
     
-    function sendResetPasswordEmail(){
+    function sendResetPasswordEmail($to){
+        $this->Email->to = $to;
+        $this->Email->subject = 'Lost password - DO NOT REPLY';
+        $this->Email->from = 'ecommerce Test Account <noreply@example.com>'; 
+        $this->Email->sendAs = 'html';
+        $this->Email->delivery = 'debug';
+        $this->Email->template = 'lost_password_notification';
+        //Set the body of the mail as we send it. 
+        //Note: the text can be an array, each element will appear as a 
+        //seperate line in the message body. 
         
+        if ( $this->Email->send() ) { 
+            $this->Session->setFlash('Simple email sent'); 
+        } else { 
+            $this->Session->setFlash('Simple email not sent'); 
+        }  
     }
 }
 ?>

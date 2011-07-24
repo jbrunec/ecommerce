@@ -49,7 +49,7 @@ class CartsController extends AppController{
 	
 	//ogled vsebine vozicka
 	function view(){
-		//$this->Session->delete('Product_ids');
+		$this->Session->delete('Product_ids');
 		$cartContents = $this->getCartContent();
 		$totalPrice = 0;
 		$i = 0;

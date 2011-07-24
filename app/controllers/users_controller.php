@@ -51,12 +51,23 @@ class UsersController extends AppController{
 		
 	}
 	
-	function login(){
+	function login($credentials = null){
+	    pr($this->referer());
+	    //die;
 		if($this->Auth->user()){
-			
+			//$this->Session->write();
 			$this->User->updateLastLogin($this->Auth->user('id'));
-			$this->redirect(array('controller' => 'carts', 'action' => 'index'));
+			//$this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
+			$this->redirect($this->referer());
+	    //se prozi v primeru ko stran usera sama prijavi ob spremembi passworda 
+		}elseif(!empty($credentials)){
+		    $this->Auth->login($credentials);
+		    $this->User->updateLastLogin($this->Auth->user('id'));
+		    $this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
 		}
+		
+		
+		
 	}
 	
 	function logout(){
@@ -82,16 +93,16 @@ class UsersController extends AppController{
 	
 	
 	function changeUserPassword(){    
-	    //argument UID pride iz ticket kontrolera ko user v mailu klikne na povezavo z appendanim unikatnim key-em
-	    if(empty($this->data)){
-	        //pr($this->passedArgs['uid']);
-	        $this->set('uid', $this->passedArgs['uid']);
-	    }elseif(!empty($this->data)){
+	    //argument userId pride iz ticket kontrolera ko user v mailu klikne na povezavo z appendanim unikatnim key-em
+	    $this->set('userId', $this->data['User']['id']);
+	    
+	    if(!empty($this->data) && isset($this->data['User']['password'])){
 	        //$password = $this->data['User']['password'];
 	        //$sql = "UPDATE users SET users.password = '$password' WHERE users.id = $userId";
-	        if($this->User->reset_password(urldecode($this->passedArgs['uid']), $this->data)){
+	        if($this->User->reset_password($this->data['User']['id'], $this->data)){
 	            $this->Session->setFlash('Password changed successfully!');
-	            $this->login();
+	            $user = $this->User->find('first', array('conditions' => array('User.id' => $this->data['User']['id'])));
+	            $this->login($user);
 	        }else{
 	            $this->Session->setFlash('Password change failed!');
 	        }

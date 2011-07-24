@@ -5,6 +5,26 @@
 	//$result = $this->requestAction("/carts/getCartContent");	
 	//debug($result);
 ?>
+<?php 
+    $user = $session->read('Auth.User');
+    if(!empty($user)){
+        echo $form->create('Order');
+        echo $form->hidden('od_status', array('value' => 'New'));
+        echo $form->input('od_shipping_first_name', array('label' => 'First name: ', 'value' => $session->read('Auth.User.first_name')));
+        echo $form->input('od_shipping_last_name', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.last_name')));
+        
+    }else{
+        
+        echo '<h3>You are not logged in?! Please login!</h3>';
+        echo $form->create('User', array('controller' => 'users', 'action' => 'login'));
+        
+        echo $form->input('email');
+        echo $form->input('password');
+        echo $form->end('login');
+        echo "---------------------------------------";
+    }
+
+?>
 
 <div id="elementsToOperateOn">
 	<legend>Shipping info</legend>

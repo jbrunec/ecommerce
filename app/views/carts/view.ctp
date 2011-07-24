@@ -4,7 +4,7 @@
 	//echo date("m/d/y",time());
 	$i = 0;
 	
-	
+	echo $html->addCrumb('Your cart contents', array('controller' => 'carts', 'action' => 'view/c:'.$c));
 	
 	echo $form->create('Cart', array('controller' => 'carts', 'action' => 'view'));
 ?>
