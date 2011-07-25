@@ -48,7 +48,7 @@
 	?>
 	
 	<tr<?php echo $class;?>>
-		<td><?php echo $html->image('products/'.$product['Product']['pd_image'], array('url' => "/products/view/c:$c/p:".$product['Product']['id'], 'width' =>'50', 'height' => '50'));?></td>
+		<td><?php echo $html->image('products/'.$product['Product']['pd_image'], array('url' => "/carts/index/c:$c/p:".$product['Product']['id'], 'width' =>'50', 'height' => '50'));?></td>
 		<td><?php echo $html->link($product['Product']['pd_name'], array('controller' => 'carts', 'action' => "index/c:$c/p:".$product['Product']['id'])); ?>&nbsp;</td>
 		<td><?php echo $product['Product']['pd_description']; ?>&nbsp;</td>
 		<td id="price"><b><?php echo '&euro;&nbsp;'.$product['Product']['pd_price']; ?>&nbsp;</b></td>

@@ -1,4 +1,4 @@
-<?php  debug($totalPrice);?>
+<?php  //debug($totalPrice);?>
 <?php 
 	debug($cartContents);
 	//echo date("m/d/y",time());

@@ -19,7 +19,11 @@ class CartsController extends AppController{
 	}
 	
 	function getCartContent(){
-		return $this->Cart->getCartContent($this->sid);
+	    if($this->Auth->user()){
+		    return $this->Cart->getCartContent($this->sid, $this->Session->read('Auth.User.id'));
+	    }else{
+	        return $this->Cart->getCartContent($this->sid);
+	    }
 	}
 	
 	function addToCart(){
@@ -34,14 +38,34 @@ class CartsController extends AppController{
 				$this->redirect(array('action' => 'index'));
 			}
 		}
-		$sessionData = $this->Cart->getCart($this->p, $this->sid);
-		if(empty($sessionData)){
-			$this->Cart->addToCart($this->p, $this->sid);
-			$this->Session->setFlash('Product added to cart!');
+		
+		//ce je user loginan se uporablja userov ID
+		if($this->Auth->user()){
+		     
+    		$sessionData = $this->Cart->getCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
+    		if(empty($sessionData)){
+    		    
+    	        $this->Cart->addToCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
+    		
+    			$this->Session->setFlash('Product added to cart! -> through user ID / inserted');
+    		}else{
+    			$this->Cart->updateCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
+    			$this->Session->setFlash('Product added to cart! -> through session ID / updated');
+    		}
+    	//ce user ni prijavljen se uporablja sejni ID
 		}else{
-			$this->Cart->updateCart($this->p, $this->sid);
-			$this->Session->setFlash('Product added to cart!');
+		    $sessionData = $this->Cart->getCart($this->p, $this->sid);
+    		if(empty($sessionData)){
+    		    
+    	        $this->Cart->addToCart($this->p, $this->sid);
+    		
+    			$this->Session->setFlash('Product added to cart! -> through session ID / inserted');
+    		}else{
+    			$this->Cart->updateCart($this->p, $this->sid);
+    			$this->Session->setFlash('Product added to cart! -> through session ID / updated');
+    		}
 		}
+		
 		
 		$this->Cart->cleanUp();
 		$this->redirect(array('controller' => 'carts', 'action' => "index/c:$this->c/p:$this->p"));
@@ -51,21 +75,27 @@ class CartsController extends AppController{
 	function view(){
 		$this->Session->delete('Product_ids');
 		$cartContents = $this->getCartContent();
-		$totalPrice = 0;
+		
+		$totalPrice = $this->Cart->getCartTotalPrice($cartContents);
 		$i = 0;
+		
+		
+		/*
 		foreach($cartContents as $item){
 			$totalPrice += ($item['Product']['pd_price'] * $item['Cart']['ct_qty']);
 			$this->Session->write("Product_ids.$i",$item['Product']['id']);
 			
 			$i++;
-		}
+		}*/
 		
 		$this->set('cartContents', $cartContents);
 		$this->set('totalPrice', $totalPrice);
 		
 		
-		//debug($this->data);
+		
 		if(!empty($this->data['Cart'])){
+		    //debug($this->data);
+		    //die;
 			$this->Cart->doUpdate($this->data['Cart']);
 			$this->redirect(array('controller' => 'carts','action' => 'view/c:'.$this->c));
 		}

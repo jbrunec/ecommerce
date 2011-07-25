@@ -49,7 +49,8 @@ class User extends AppModel {
 			'rule2' => array(
 				'rule' => array('email'),
 				'message' => 'your email is not valid!'				
-				)
+				),
+			
 			
 		),
 		'password' => array(
@@ -123,11 +124,17 @@ class User extends AppModel {
     }
     
     
-    function updateLastLogin($user_id){
+    function updateLastLogin($user_id, $session_id){
     	$sql = "UPDATE users SET user_last_login = NOW() WHERE id = $user_id";
-    	
+    	$this->id = $user_id;
+    	$this->saveField('session_id', $session_id);
     	$this->query($sql);
     }
+    
+    
+    
+    
+    
     
     
     //za ponovno nastavitev passworda

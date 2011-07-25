@@ -26,7 +26,14 @@ class OrdersController extends AppController{
 		
 		if($this->step == 2){
 			if(!empty($this->data)){
+			    $this->Order->set($this->data);
+			    if(!$this->Order->validates(array('fieldList' => 'payment_option'))){
+			        $this->Session->setFlash('You forgot to choose payment option');
+			        $this->redirect($this->referer());
+			    }
 				$this->set('userInfo',$this->data);
+				$totalPrice = $this->Order->Product->Cart->getCartTotalPrice(null, $this->sid, $this->Session->read('Auth.User.id'));
+				$this->set('totalPrice',$totalPrice);
 				if($this->data['Order']['payment_option'] == 2){
 					$this->redirect("index/c:$this->c/step:google");
 				}
@@ -34,7 +41,12 @@ class OrdersController extends AppController{
 			
 		}elseif ($this->step == 'cod'){
 			if(!empty($this->data)){
-				$orderedProducts = $this->Order->saveOrder($this->data,$this->Session->read('Product_ids'),$this->sid);
+			    if($this->Auth->user()){
+			        $orderedProducts = $this->Order->saveOrder($this->data,$this->data['User']['id']);
+			    }else{
+			        $orderedProducts = $this->Order->saveOrder($this->data,$this->sid);
+			    }
+				
 				$this->_sendEmail($this->data['Order']['od_payment_email'], 'Your Order has been recieved!',$orderedProducts, 'received_order');
 				$this->Session->delete('Product_ids');
 			}

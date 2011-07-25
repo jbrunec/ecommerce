@@ -14,6 +14,7 @@ class UsersController extends AppController{
 			
 		
 		$this->Auth->autoRedirect = false;
+		$this->Auth->loginRedirect = '/';
 		//doseg za neregistrirane osebe
 		$this->Auth->allow('login','logout','register','admin_login','reset_password','changeUserPassword');
 		if($this->Auth->user()){
@@ -56,9 +57,19 @@ class UsersController extends AppController{
 	    //die;
 		if($this->Auth->user()){
 			//$this->Session->write();
-			$this->User->updateLastLogin($this->Auth->user('id'));
-			//$this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
-			$this->redirect($this->referer());
+			$this->User->updateLastLogin($this->Auth->user('id'), $this->Session->read('Config.userAgent'));
+			if($this->referer() != "/users/login"){
+			    pr('in referer redirection');
+			    //die;
+			    $this->redirect($this->referer());
+			}else{
+			    pr('in regular redirection!');
+			    //die;
+			    $this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
+			}
+			
+			
+			//$this->redirect($this->referer('/carts/index',false));
 	    //se prozi v primeru ko stran usera sama prijavi ob spremembi passworda 
 		}elseif(!empty($credentials)){
 		    $this->Auth->login($credentials);

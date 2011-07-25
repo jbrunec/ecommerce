@@ -1,6 +1,6 @@
 <?php 
 	$result = $this->requestAction("/carts/getCartContent");
-	debug($session->read());
+	debug($this->data);
 
 ?>
 <p>confirmation page</p>
@@ -56,19 +56,9 @@
 	<?php echo $form->input('Order.od_payment_city',array('value' => $userInfo['Order']['od_payment_city'],'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_payment_postal_code',array('value' => $userInfo['Order']['od_payment_postal_code'],'type' => 'hidden'));?>
 	</tbody>
-	<tfoot>
-    	<tr>
-        	<td colspan="1">&nbsp;</td>
-        	<td colspan="1"><?php echo $html->link('Continue shopping', '/carts/index/c:'.$c)?></td>
-        	<td colspan="1"><?php echo $html->link('<< Back to step 1', "/orders/index/c:$c/step:1")?></td>
-        	<td colspan="1">      	
-				<?php echo $form->end('Finalize Order');?>
-        	</td>
-        	<td colspan="1"><?php echo '= '.Configure::read('Shop.currency').' '.$totalPrice;?></td>
-        </tr>
-        
-        	
 
-    </tfoot>
 </table>
 
+<?php echo $html->link('Continue shopping', '/carts/index/c:'.$c, null, false);?>
+<br>
+<?php echo $html->link('<< Back to step 1', "/orders/index/c:$c/step:1")?>
