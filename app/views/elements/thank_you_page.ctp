@@ -1,1 +1,1 @@
-<p>Thank you for your purchase!<p>
+<h3>Thank you for your purchase!</h3>

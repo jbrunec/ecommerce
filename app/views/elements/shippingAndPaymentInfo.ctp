@@ -31,7 +31,7 @@
         echo $form->hidden('od_payment_postal_code', array('value' => $session->read('Auth.User.postal_code')));
         echo $form->hidden('od_payment_email', array('value' => $session->read('Auth.User.email')));
         //echo $form->hidden('od_payment_tax', array('value' => $session->read('Auth.User.first_name')));
-        echo $form->hidden('od_payment_total', array('value' => 50.00));
+        //echo $form->hidden('od_payment_total', array('value' => 50.00));
         echo $form->end('next step >>');
          echo "<hr>";
     }else{

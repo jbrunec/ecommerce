@@ -31,23 +31,27 @@ class OrdersController extends AppController{
 			        $this->Session->setFlash('You forgot to choose payment option');
 			        $this->redirect($this->referer());
 			    }
+			    
 				$this->set('userInfo',$this->data);
 				$totalPrice = $this->Order->Product->Cart->getCartTotalPrice(null, $this->sid, $this->Session->read('Auth.User.id'));
 				$this->set('totalPrice',$totalPrice);
 				if($this->data['Order']['payment_option'] == 2){
 					$this->redirect("index/c:$this->c/step:google");
 				}
+			}else{
+			    $this->Session->setFlash('User data missing!');
+			    $this->redirect(array('action' => "index/c:$c/step:1"));
 			}
 			
 		}elseif ($this->step == 'cod'){
 			if(!empty($this->data)){
 			    if($this->Auth->user()){
-			        $orderedProducts = $this->Order->saveOrder($this->data,$this->data['User']['id']);
+			        $orderedProducts = $this->Order->saveOrder($this->data, $this->sid ,$this->data['User']['id']);
 			    }else{
 			        $orderedProducts = $this->Order->saveOrder($this->data,$this->sid);
 			    }
-				
-				$this->_sendEmail($this->data['Order']['od_payment_email'], 'Your Order has been recieved!',$orderedProducts, 'received_order');
+				//$this->redirect(array('action' => "index/c:$c"/))
+				//$this->_sendEmail($this->data['Order']['od_payment_email'], 'Your Order has been recieved!',$orderedProducts, 'received_order');
 				$this->Session->delete('Product_ids');
 			}
 		}elseif($this->step == 'paypal'){
@@ -60,6 +64,16 @@ class OrdersController extends AppController{
 			$this->set('paypal',$paypal);
 
 		}
+	}
+	
+	function get_recent_orders(){
+	    $orders = $this->Order->get_recent_orders();
+	    if(!empty($this->params['requested'])){
+	        return $orders;
+	    }else{
+	        $this->set('orders', $orders);
+	    }
+	    
 	}
 	
 	function _sendEmail($to, $subject, $object, $template) {

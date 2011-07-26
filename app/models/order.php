@@ -29,7 +29,7 @@ class Order extends AppModel{
 		
 		
 	//shranjevanje narocila
-	function saveOrder($orderData, $user_id){
+	function saveOrder($orderData, $session_id ,$user_id = null){
 		
 		//shrani Order v orders table
 		$orderData['Order']['od_shipping_cost'] = 5.00;
@@ -42,14 +42,20 @@ class Order extends AppModel{
 		
 		
 		//    pridobivanje IDjev produktov iz vozicka 
-		$result = $this->Product->Cart->getCartContent($user_id);
-		$product_ids = array();
-		$i = 0;		
-		foreach ($result['Product'] as $item){
-		    $product_ids[$i] = $item['id'];
-		    $i++;
+		if(!empty($user_id)){
+		    $result = $this->Product->Cart->getCartContent(null, $user_id);
+		}else{
+		    $result = $this->Product->Cart->getCartContent($session_id);
 		}
 		
+		$product_ids = array();
+		$i = 0;		
+		foreach ($result as $item){
+		    $product_ids[$i] = $item['Product']['id'];
+		    $i++;
+		}
+		//pr($product_ids);
+		//die;
 		$this->addAssoc('Product', $product_ids, $order_id);
 		
 		//updatanje zaloge v tabeli products
@@ -72,6 +78,14 @@ class Order extends AppModel{
 		return $products;
 		
 		
+	}
+	
+	
+	function get_recent_orders(){
+	    $time = new TimeHelper();
+	    $currentTime = $time->format("Y-m-d H:i:s",time());
+	    //pr();
+	    return $this->find('all');
 	}
 	
 	

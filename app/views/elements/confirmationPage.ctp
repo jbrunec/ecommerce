@@ -3,7 +3,7 @@
 	debug($this->data);
 
 ?>
-<p>confirmation page</p>
+<h3>confirmation page</h3>
 <table id="gradient-style">
     <thead>
     	<tr>
@@ -39,7 +39,7 @@
 	}
 	?>
 	
-	
+	<?php echo $form->hidden('User.id', array('value' => $userInfo['User']['id']))?>
 	<?php echo $form->input('Order.od_status', array('value' => 'New', 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_first_name', array('value' => $userInfo['Order']['od_shipping_first_name'], 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_last_name', array('value' => $userInfo['Order']['od_shipping_last_name'], 'type' => 'hidden'));?>
@@ -55,10 +55,26 @@
 	<?php echo $form->input('Order.od_payment_address',array('value' => $userInfo['Order']['od_payment_address'],'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_payment_city',array('value' => $userInfo['Order']['od_payment_city'],'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_payment_postal_code',array('value' => $userInfo['Order']['od_payment_postal_code'],'type' => 'hidden'));?>
+	<?php echo $form->hidden('Order.od_payment_total', array('value' => $totalPrice));?>
 	</tbody>
-
+	<tfoot>
+		<tr>
+			<td colspan="4">&nbsp;</td>
+			<td colspan="1"><?php echo ' ='.Configure::read('Shop.currency').' '.$totalPrice;?></td>
+		</tr>
+	</tfoot>
 </table>
 
+<dl>
+  <lh><h3>Your Shipping Information:</h3></lh>
+  <dt class="altrow">First Name: </dt>  <dd><?php echo $userInfo['Order']['od_shipping_first_name'];?></dd>
+  <dt>Last Name: </dt> <dd><?php echo $userInfo['Order']['od_shipping_last_name'];?></dd>
+  <dt class="altrow">Address: </dt> <dd><?php echo $userInfo['Order']['od_shipping_address'];?></dd>
+  <dt>Postal code: </dt> <dd><?php echo $userInfo['Order']['od_shipping_postal_code'];?></dd>
+  <dt class="altrow">City: </dt> <dd><?php echo $userInfo['Order']['od_shipping_city'];?></dd>
+</dl>
+
+<?php echo $form->end('Finalize Order!')?>
 <?php echo $html->link('Continue shopping', '/carts/index/c:'.$c, null, false);?>
 <br>
 <?php echo $html->link('<< Back to step 1', "/orders/index/c:$c/step:1")?>
