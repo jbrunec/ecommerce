@@ -1,5 +1,5 @@
 <p>Please fill out the register form!</p>
-<p>Current time: <?php echo $time->format('Y-m-d H:i:s', time());?></p>
+<p>Current time: <?php echo $time->format('Y-m-d H:i:s', $time->gmt());?></p>
 <?php 
 	echo $form->create();
 	echo $form->input('email', array('label' => 'Email: ', 'after' => '<span style="color:red">*</span>'));

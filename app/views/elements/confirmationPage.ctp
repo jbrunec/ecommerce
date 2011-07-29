@@ -1,6 +1,7 @@
 <?php 
 	$result = $this->requestAction("/carts/getCartContent");
 	debug($this->data);
+	debug($totalPrice);
 
 ?>
 <h3>confirmation page</h3>

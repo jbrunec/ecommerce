@@ -1,22 +1,4 @@
-<?php
-/**
- *
- * PHP versions 4 and 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.cake.libs.view.templates.layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
-?>
+<?php //debug($session->read())?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -26,9 +8,18 @@
 		<?php __('CakePHP: the rapid development php framework:'); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
+	<style type="text/css">
+            div.disabled {
+                    display: inline;
+                    float: none;
+                    clear: none;
+                    color: #C0C0C0;
+            }
+    </style>
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
+		echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');		
 		echo $html->script('tiny_mce/tiny_mce');
 		echo $scripts_for_layout;
 	?>
@@ -44,8 +35,11 @@
 			<?php echo $this->Session->flash('auth');?>
 
 			<?php echo $content_for_layout; ?>
-			<?php if($session->check('Auth.User.admin')){?>
+			<?php if($session->check('Auth.User.admin') == 1){?>
     			<div class="actions">
+    				<ul>
+    					<li><?php echo $html->link('Index', array('controller' => 'users', 'action' => 'admin_index', 'admin' => true))?></li>
+    				</ul>
                 	<h3>Product related actions:</h3>
                 	<ul>           
                 		<li><?php echo $this->Html->link('Add new product', array('controller' => 'products','action' => 'admin_add_product', 'admin' => true));?></li>
@@ -55,6 +49,11 @@
                 	<h3>Users related actions: </h3>
                 	<ul>
                 		<li><?php echo $html->link('Show all registered users', array('controller' => 'users', 'action' => 'admin_show_all_users'));?></li>
+                	</ul>
+                	<br></br>
+                	<h3>Orders related actions: </h3>
+                	<ul>
+                		<li><?php echo $html->link('Show all orders', array('controller' => 'orders', 'action' => 'admin_get_all_orders'));?></li>
                 	</ul>
                 	<br></br>
                 	<h3>Admin: </h3>

@@ -29,7 +29,7 @@ class UsersController extends AppController{
 		
 		//$this->Auth->loginError = "false login credentials";
 		//s tem overridamo Auth komponento za User model, da lahko uvedemo svoj hashing paswordov
-		if($this->action == 'register' ){
+		if($this->action == 'register' || $this->action == 'admin_edit_user' ){
 			$this->Auth->authenticate = $this->User;
 			
 		}
@@ -120,6 +120,17 @@ class UsersController extends AppController{
 	    }
 	}
 	
+	
+	function get_new_users(){
+	    $users = $this->User->get_new_users();
+	    
+	    if(isset($this->params['requested'])){
+	        return $users;
+	    }else{
+	        $this->set('users',$users);
+	    }
+	}
+	
 
 	
 	/*
@@ -184,6 +195,41 @@ class UsersController extends AppController{
 	            $this->Session->setFlash('Password change error!');
 	        }
 	    }
+	}
+	
+	
+	function admin_view_user($id = null){
+	    if(!$id){
+	        $this->Session->setFlash('Wrong user ID!');
+	    }else{
+	        $user = $this->User->findById($id);
+	        $this->set(compact('user'));
+	    }
+	    
+	}
+	
+	
+	function admin_edit_user($id = null){
+	    pr($this->action);
+	    if (!$id && empty($this->data)) {
+			$this->Session->setFlash('Invalid User');
+			$this->redirect(array('action' => 'admin_show_all_users', 'admin' => true));
+		}
+		if (!empty($this->data)) {
+		           
+		    if ($this->User->save($this->data)) {
+			    $this->Session->setFlash('User has been edited successfully');
+			    $this->redirect(array('action' => 'admin_show_all_users', 'admin' => true));
+		    } else {
+			    $this->Session->setFlash('User could not be edited!');
+		    }
+	    
+		   
+		}
+	    if (empty($this->data)) {
+			$this->data = $this->User->read(null, $id);
+			$this->data['User']['password'] = '';
+		}
 	}
 	
 	

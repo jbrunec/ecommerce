@@ -12,8 +12,26 @@ class OrdersController extends AppController{
 	
 	function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('*');
+		$this->Auth->allow('index');
 		
+		if($this->isAuthorized()){
+		    $this->Auth->allow('*');
+		}
+		
+	}
+	
+	
+	function isAuthorized(){
+	    if($this->Auth->user('admin')){
+			pr('this user is admin');
+			//exit;
+			return true;
+		}else{
+			pr('this user is NOT admin');
+			//exit;
+			//$this->Session->setFlash('This area is for admins only!');
+			return false;
+		}
 	}
 	
 	function index(){
@@ -67,27 +85,28 @@ class OrdersController extends AppController{
 	}
 	
 	function get_recent_orders(){
-	    $orders = $this->Order->get_recent_orders();
-	    if(!empty($this->params['requested'])){
+	    $orders = $this->paginate();
+	    if($this->params['requested']){
 	        return $orders;
 	    }else{
 	        $this->set('orders', $orders);
 	    }
+    
+	}
+	
+	//za view admin_get_all_orders, prikaze vsa narocila
+	function admin_get_all_orders(){
+	    //$orders = $this->Order->find('all');
+	    $this->paginate = array('limit' => 10, 'order' => 'Order.od_date ASC');
 	    
+	    $this->set('orders', $this->paginate());
 	}
 	
-	function _sendEmail($to, $subject, $object, $template) {
-		$this->Email->from = 'info@ecommerce.com';
-		$this->Email->to = $to;
-		$this->Email->subject = $subject;
-		$this->Email->template = $template;
-		//$this->Email->textMessage = $message;
-		$this->Email->delivery = 'debug';
-		$this->Email->sendAs = 'html';
-		$this->set('Object',$object);
-		$this->Email->send();
-	}
 	
+	function admin_view($id = null){
+	    $order =  $this->Order->find('first', array('conditions' => array('Order.id' => $id)));
+	    $this->set(compact('order'));
+	}
 	
 	
 	

@@ -1,4 +1,5 @@
 <?php
+ App::import('Helper', 'Time');
 class Cart extends AppModel{
 	var $name = 'Cart';
 	var $belongsTo = array('Product');
@@ -28,8 +29,9 @@ class Cart extends AppModel{
 	}
 	
 	function addToCart($product_id, $session_id, $user_id = null){
+	    $time = new TimeHelper();
 		$this->data['Cart']['product_id'] = $product_id;
-		$this->data['Cart']['ct_date'] = date("Y-m-d H:i:s", time());
+		$this->data['Cart']['ct_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
 		$this->data['Cart']['ct_qty'] = 1;
 		$this->data['Cart']['ct_session_id'] = $session_id;
 		$this->data['Cart']['user_id'] = $user_id;
@@ -116,10 +118,10 @@ class Cart extends AppModel{
 	
 	
 	function doUpdate($cart){
-		
+		$time = new TimeHelper();
 		foreach($cart as $item){
 			$this->data['Cart']['ct_qty'] = $item['ct_qty'];
-			$this->data['Cart']['ct_date'] = date("Y-m-d H:i:s", time());
+			$this->data['Cart']['ct_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
 			$this->id = $item['id'];
 			$this->save();
 		}

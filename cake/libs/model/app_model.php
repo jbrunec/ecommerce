@@ -41,7 +41,7 @@ class AppModel extends Model {
      * @param integer $id The id of the record in this model 
      * @return boolean Success 
      */ 
-    function addAssoc($assoc, $assoc_ids, $id = null) 
+    function addAssoc($assoc, $assoc_ids, $id = null, $data = null) 
     { 
         if ($id != null) { 
             $this->id = $id; 
@@ -60,22 +60,36 @@ class AppModel extends Model {
             $table = $db->name($db->fullTableName($joinTable)); 
              
             $keys[] = $this->hasAndBelongsToMany[$assoc]['foreignKey']; 
-            $keys[] = $this->hasAndBelongsToMany[$assoc]['associationForeignKey']; 
+            $keys[] = $this->hasAndBelongsToMany[$assoc]['associationForeignKey'];
+            //dodal: ime polja v DB, ki ga bomo shranjevali
+            $keys[] = 'od_qty'; 
+            
+            
+            
             $fields = join(',', $keys); 
-             
+            debug($fields);
             if(!is_array($assoc_ids)) { 
                 $assoc_ids = array($assoc_ids); 
             } 
          
             // to prevent duplicates 
             $this->deleteAssoc($assoc,$assoc_ids,$id); 
-             
+            //dodano za upravljanje s poljem
+            
             foreach ($assoc_ids as $assoc_id) { 
                 $values[]  = $db->value($id, $this->getColumnType($this->primaryKey)); 
-                $values[]  = $db->value($assoc_id); 
+                $values[]  = $db->value($assoc_id);
+                //dodal: tukaj se shranjujejo vrednosti polja Data
+                foreach($data as $key => $value){
+                    $values[] = $value; 
+                }
+                
                 $values    = join(',', $values); 
-                 
+                
+                debug($values);
+                //die;
                 $db->execute("INSERT INTO {$table} ({$fields}) VALUES ({$values})"); 
+                
                 unset ($values); 
             } 
              

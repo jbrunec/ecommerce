@@ -19,6 +19,8 @@ class Order extends AppModel{
 				'associationForeignKey' => 'product_id'
 			)
 	);
+	
+	var $virtualFields = array('od_shipping_full_name' => 'CONCAT(Order.od_shipping_first_name, " ", Order.od_shipping_last_name)');
 		
 	var $validate = array(
 	    'payment_option' => array(
@@ -30,11 +32,12 @@ class Order extends AppModel{
 		
 	//shranjevanje narocila
 	function saveOrder($orderData, $session_id ,$user_id = null){
-		
+		$time = new TimeHelper();
 		//shrani Order v orders table
 		$orderData['Order']['od_shipping_cost'] = 5.00;
-		$orderData['Order']['od_date'] = date("Y-m-d H:i:s", time());
+		$orderData['Order']['od_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
 		$orderData['Order']['od_payment_tax'] = 0.00;
+		
 		$this->save($orderData);
 		
 		//shrani produkte v vmesno tabelo orders_products
@@ -49,14 +52,18 @@ class Order extends AppModel{
 		}
 		
 		$product_ids = array();
+		$orderQty = array();
 		$i = 0;		
 		foreach ($result as $item){
 		    $product_ids[$i] = $item['Product']['id'];
+		    $orderQty[$i] = $item['Cart']['ct_qty'];
 		    $i++;
 		}
 		//pr($product_ids);
 		//die;
-		$this->addAssoc('Product', $product_ids, $order_id);
+		
+		$this->addAssoc('Product', $product_ids, $order_id, $orderQty);
+		//die;
 		
 		//updatanje zaloge v tabeli products
 		
@@ -80,13 +87,15 @@ class Order extends AppModel{
 		
 	}
 	
-	
+	//funkcija za pridobitev vseh narocil, ki niso starejsa od 1 dneva
 	function get_recent_orders(){
 	    $time = new TimeHelper();
-	    $currentTime = $time->format("Y-m-d H:i:s",time());
-	    //pr();
-	    return $this->find('all');
+        $dayAgo = $time->gmt() - 86400;
+        $formatedDayAgo = $time->format("Y-m-d H:i:s",$dayAgo);
+	    return $this->find('all', array('conditions' => array('Order.reg_date >=' => $formatedDayAgo)));
 	}
+	
+	
 	
 	
 	

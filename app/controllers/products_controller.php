@@ -46,7 +46,7 @@ class ProductsController extends AppController{
 		$allCatIds = array_merge(array($this->passedArgs['c']),$catChildren);
 		
 		//pr($allCatIds);
-		$this->paginate = array('conditions' => array('Product.category_id' => $allCatIds),'limit' => 3);
+		$this->paginate = array('conditions' => array('Product.category_id' => $allCatIds),'limit' => 2);
 		$data = $this->paginate();
 		$this->set('products',$data);
 		$this->helpers['Paginator'] = array('ajax' => 'Ajax');

@@ -34,15 +34,15 @@ class User extends AppModel {
 	);
 	
 	
-	
+	var $virtualFields = array('full_name' => 'CONCAT(User.first_name, " ", User.last_name)');
 		
 	
 	
 	var $validate = array(
 		'email' => array(
 			'notempty' => 	array(
-				'rule' => array('notempty'),
-				'required' => true,
+				'rule' => 'notEmpty',
+				//'required' => true,
 				'message' => 'this field cannot be left blank!'
 				),
 			
@@ -73,6 +73,7 @@ class User extends AppModel {
 			'password_match' => array(
 				'rule' => array('comparePassword','password_confirm'),
 			    //'required' => true,
+			    'on' => 'create',
 				'message' => 'passwords do not match!'
 			),
 		),	
@@ -156,6 +157,17 @@ class User extends AppModel {
             return false;
         }
         
+    }
+    
+    //funkcija za vracanje novo registriranih userov (1 dan)
+    function get_new_users(){
+        $time = new TimeHelper();
+        $dayAgo = $time->gmt() - 86400;
+        $formatedDayAgo = $time->format("Y-m-d H:i:s",$dayAgo);
+        
+        return $this->find('all', array('conditions' => array('User.reg_date >=' => $formatedDayAgo)));
+            
+       
     }
     
     

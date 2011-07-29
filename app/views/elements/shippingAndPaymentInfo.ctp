@@ -16,9 +16,10 @@
         echo $form->input('od_shipping_first_name', array('label' => 'First name: ', 'value' => $session->read('Auth.User.first_name')));
         echo $form->input('od_shipping_last_name', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.last_name')));
         echo $form->input('od_shipping_phone_number', array('label' => 'Phone number: ', 'value' => $session->read('Auth.User.phone_number')));
-        echo $form->input('od_shipping_address', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.address')));
-        echo $form->input('od_shipping_city', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.city')));
-        echo $form->input('od_shipping_postal_code', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.postal_code')));echo $form->input('od_shipping_last_name', array('label' => 'Last name: ', 'value' => $session->read('Auth.User.last_name')));
+        echo $form->input('od_shipping_address', array('label' => 'Address: ', 'value' => $session->read('Auth.User.address')));
+        echo $form->input('od_shipping_city', array('label' => 'City: ', 'value' => $session->read('Auth.User.city')));
+        echo $form->input('od_shipping_postal_code', array('label' => 'Postal Code: ', 'value' => $session->read('Auth.User.postal_code')));
+        
         
         echo $form->radio('Order.payment_option', array('C.O.D.','Paypal','Google Checkout'));
        
