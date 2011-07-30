@@ -90,9 +90,13 @@ class Order extends AppModel{
 	//funkcija za pridobitev vseh narocil, ki niso starejsa od 1 dneva
 	function get_recent_orders(){
 	    $time = new TimeHelper();
+	    	    
         $dayAgo = $time->gmt() - 86400;
+        
         $formatedDayAgo = $time->format("Y-m-d H:i:s",$dayAgo);
-	    return $this->find('all', array('conditions' => array('Order.reg_date >=' => $formatedDayAgo)));
+	    $result =  $this->find('all', array('conditions' => array('od_date >=' => $formatedDayAgo)));
+	    
+	    return $result;
 	}
 	
 	

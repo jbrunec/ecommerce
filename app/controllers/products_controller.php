@@ -149,46 +149,63 @@ class ProductsController extends AppController{
 		$this->paginate = array('limit' => 5);
 		//$products = $this->Product->find('all');
 		$this->set('products', $this->paginate());
+		
+		
 	}
 	
-	/*
-	function admin_upload_photo($file = null){
-    	$path = "/img/products/";
-        $dir = getcwd().$path;
-        $avatarFile = "$dir$id.png";
-
-        if (isset($this->data['Product']['pd_image']) && $this->data['Product']['pd_image']['error'] == 0) {
-            $image = $this->data['Product']['pd_image'];
-
-            if (in_array($image['type'], array('image/jpeg','image/pjpeg','image/png'))) {
-
-                // load image
-                list($width,  $height) = getimagesize($image['tmp_name']);
-                $width = $height = min($width, $height);
-
-                if (in_array($image['type'], array('image/jpeg','image/pjpeg')))
-                    $source = imagecreatefromjpeg($image['tmp_name']);
-                else
-                    $source = imagecreatefrompng($image['tmp_name']);
-
-                // resize
-                $thumb = imagecreatetruecolor(128, 128);
-                imagecopyresized($thumb,  $source,  0,  0,  0,  0,  128,  128,  $width,  $height);
-
-                // save resized & unlink upload
-                imagepng($thumb, $avatarFile);
-
-                $success = true;
-            } else {
-                $this->Product->invalidate('pd_image', __("Only JPG or PNG accepted.",true));
-                $success = false;
-            }
-
-            unlink($image['tmp_name']); // Delete upload in any case
-        }
-        
-        //return $success;
-	}*/
+	function admin_get_stock_info(){
+	    //$products = $this->Product->find('all');
+	    $this->paginate = array('fields' => array('Product.id','Product.pd_name','Product.pd_qty'), 'order' => 'Product.pd_qty ASC');
+	    $this->set('products', $this->paginate());
+	    
+	    if(!empty($this->data)){
+		    pr($this->data);
+		    //die;
+		    $productId = $this->passedArgs['pd_id'];
+		    $stockQty = $this->data['Product']['pd_qty'];
+		    if($this->Product->update_stock_qty($productId,$stockQty)){
+		        $this->Session->setFlash('Product stock updated successfully!');
+		        $this->redirect(array('action' => "admin_get_stock_info", 'admin' => true));
+		    }else{
+		        $this->Session->setFlash('Product stock failed to update');
+		        $this->redirect(array('action' => "admin_get_stock_info", 'admin' => true));
+		    }
+		    
+		    
+		}
+	}
+	
+	//za updatanje zaloge preko XMLa
+	function admin_batch_xml_stock_update(){
+	    App::import('Xml');
+	    
+	    if(!empty($this->data)){
+	        $path = WWW_ROOT.'files\\';
+	        $xml = $this->data['Product']['file']['tmp_name'];
+	        $xmlName = $this->data['Product']['file']['name'];
+	        $file = new File($xml);
+	        $xmlContent = $file->read();
+	        $file->close();
+	        
+	        $file = new File($path.$xmlName, true);
+	        $file->write($xmlContent);
+	        $file->close();
+	        
+	        $parsed_xml = new Xml($path.$xmlName);
+	        $parsed_xml = Set::reverse($parsed_xml);
+	        $this->Product->batch_xml_update($parsed_xml);
+	        $this->Session->setFlash('Xml update successful!'); 
+	    }
+	    
+	    //$file = WWW_ROOT.'files\\stock_update.xml';
+	    
+	    ;
+	    //debug($parsed_xml);
+	    //die;
+	    
+	    
+	}
+	
 	function admin_upload_photo($file = null){
 	    $path = "img\\products\\";
 	    $dir = WWW_ROOT.$path;

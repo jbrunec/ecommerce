@@ -54,6 +54,26 @@ class Product extends AppModel{
     	$this->invalidate($field,'Error uploading file');
 	    return false;
     }
+    
+    function update_stock_qty($id, $qty){
+             
+        $this->id = $id;
+        if($this->saveField('pd_qty', $qty)){
+            return true;
+        }else{    
+            return false;
+        }
+    }
+    
+    
+    function batch_xml_update($data){
+        foreach($data['Products']['Product'] as $product){
+            $this->id = $product['id'];
+            $this->saveField('pd_qty', $product['quantity']);
+        }
+        
+        return true;
+    }
 	
 }
 ?>

@@ -83,9 +83,9 @@ class OrdersController extends AppController{
 
 		}
 	}
-	
+	//narocila stara 1 dan in manj
 	function get_recent_orders(){
-	    $orders = $this->paginate();
+	    $orders = $this->Order->get_recent_orders();
 	    if($this->params['requested']){
 	        return $orders;
 	    }else{

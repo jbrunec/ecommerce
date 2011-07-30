@@ -41,7 +41,9 @@
     					<li><?php echo $html->link('Index', array('controller' => 'users', 'action' => 'admin_index', 'admin' => true))?></li>
     				</ul>
                 	<h3>Product related actions:</h3>
-                	<ul>           
+                	<ul>  
+                	    <li><?php echo $this->Html->link('Batch xml stock update', array('controller' => 'products','action' => 'admin_batch_xml_stock_update', 'admin' => true));?></li>           	
+                		<li><?php echo $this->Html->link('Stock info', array('controller' => 'products','action' => 'admin_get_stock_info', 'admin' => true));?></li>         
                 		<li><?php echo $this->Html->link('Add new product', array('controller' => 'products','action' => 'admin_add_product', 'admin' => true));?></li>
                 		<li><?php echo $this->Html->link('Show all products', array('controller' => 'products','action' => 'admin_show_all_products', 'admin' => true));?></li>
                 	</ul>
