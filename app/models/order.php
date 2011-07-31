@@ -39,17 +39,21 @@ class Order extends AppModel{
 		$orderData['Order']['od_payment_tax'] = 0.00;
 		
 		$this->save($orderData);
+		    
 		
+				
 		//shrani produkte v vmesno tabelo orders_products
 		$order_id = $this->getInsertID();
 		
 		
 		//    pridobivanje IDjev produktov iz vozicka 
 		if(!empty($user_id)){
-		    $result = $this->Product->Cart->getCartContent(null, $user_id);
+		    $result = $this->Product->Cart->getCartContent($session_id, $user_id);
 		}else{
 		    $result = $this->Product->Cart->getCartContent($session_id);
 		}
+		
+		
 		
 		$product_ids = array();
 		$orderQty = array();
@@ -59,11 +63,10 @@ class Order extends AppModel{
 		    $orderQty[$i] = $item['Cart']['ct_qty'];
 		    $i++;
 		}
-		//pr($product_ids);
-		//die;
+		
 		
 		$this->addAssoc('Product', $product_ids, $order_id, $orderQty);
-		//die;
+		
 		
 		//updatanje zaloge v tabeli products
 		
@@ -82,7 +85,7 @@ class Order extends AppModel{
 		
 		
 		
-		return $products;
+		return $result;
 		
 		
 	}
@@ -99,6 +102,24 @@ class Order extends AppModel{
 	    return $result;
 	}
 	
+	//funkcija za racunanje vsote vseh zakljucenih narocil
+	function get_total_payed_orders_sum(){
+	    $result =  $this->find('all', array('conditions' => array('od_status' => 'Completed')));
+	    $totalSum = 0.00;
+	    foreach($result as $order){
+	        $totalSum += ($order['Order']['od_payment_total']);
+	    }
+	    
+	    return $totalSum;
+	}
+	
+	function get_ordered_items($id){
+	    $result = $this->find('first', array('conditions' => array('Order.id' => $id)));
+	    $orderedProducts = array();
+	    
+	    
+	    return $result;
+	}
 	
 	
 	

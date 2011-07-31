@@ -1,6 +1,6 @@
-<?php debug($uid)?>
+<?php //debug($uid)?>
 <div class="users form">
-	<h3>Change user's password</h3>
+	<h3>Change user <?php echo $uname?>'s password</h3>
 	<?php 
 	    echo $form->create('User', array('url' => array('action' => 'admin_reset_password', 'uid' => $uid)));
 	    echo $form->input('password');

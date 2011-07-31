@@ -159,7 +159,7 @@ class ProductsController extends AppController{
 	    $this->set('products', $this->paginate());
 	    
 	    if(!empty($this->data)){
-		    pr($this->data);
+		    //pr($this->data);
 		    //die;
 		    $productId = $this->passedArgs['pd_id'];
 		    $stockQty = $this->data['Product']['pd_qty'];
@@ -196,12 +196,7 @@ class ProductsController extends AppController{
 	        $this->Product->batch_xml_update($parsed_xml);
 	        $this->Session->setFlash('Xml update successful!'); 
 	    }
-	    
-	    //$file = WWW_ROOT.'files\\stock_update.xml';
-	    
-	    ;
-	    //debug($parsed_xml);
-	    //die;
+	   
 	    
 	    
 	}

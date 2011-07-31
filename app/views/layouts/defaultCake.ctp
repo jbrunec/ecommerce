@@ -35,7 +35,7 @@
 			<?php echo $this->Session->flash('auth');?>
 
 			<?php echo $content_for_layout; ?>
-			<?php if($session->check('Auth.User.admin') == 1){?>
+			<?php if($session->read('Auth.User.admin') == 1){?>
     			<div class="actions">
     				<ul>
     					<li><?php echo $html->link('Index', array('controller' => 'users', 'action' => 'admin_index', 'admin' => true))?></li>
@@ -56,6 +56,7 @@
                 	<h3>Orders related actions: </h3>
                 	<ul>
                 		<li><?php echo $html->link('Show all orders', array('controller' => 'orders', 'action' => 'admin_get_all_orders'));?></li>
+                		<li><?php echo $html->link('Completed orders', array('controller' => 'orders','action' => 'admin_get_completed_orders', 'admin' => true)); ?></li>
                 	</ul>
                 	<br></br>
                 	<h3>Admin: </h3>

@@ -1,6 +1,6 @@
 <?php debug($order)?>
 <div class="orders view">
-<h2>Order</h2>
+<h2>Order info: </h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
 		<dt<?php if ($i % 2 == 0) echo $class;?>>id</dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
@@ -56,24 +56,26 @@
 </div>
 <br>
 <div class="products view">
-<h2>Ordered Products</h2>
+<h2>Ordered Products: </h2>
 <?php foreach($order['Product'] as $product):?>
 	<dl>
-		<dt<?php if ($i % 2 == 0) echo $class;?>>Name</dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $product['pd_name']; ?>
+		<dt class="altrow">Name</dt>
+		<dd class="altrow">
+			<strong><?php echo $product['pd_name']; ?></strong>
 			&nbsp;			
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>>price:</dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $product['pd_price']; ?>
+		<dt>price:</dt>
+		<dd>
+			<?php echo Configure::read('Shop.currency').' '.$product['pd_price']; ?>
 			&nbsp;			
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>>Quantity:</dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
+		<dt class="altrow">Quantity:</dt>
+		<dd class="altrow">
 			<?php echo 'X '.$product['OrdersProduct']['od_qty']; ?>
 			&nbsp;			
 		</dd>
 	</dl>
+	<br>
+	<hr>
 <?php endforeach;?>
 </div>

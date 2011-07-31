@@ -53,9 +53,12 @@ class OrdersController extends AppController{
 				$this->set('userInfo',$this->data);
 				$totalPrice = $this->Order->Product->Cart->getCartTotalPrice(null, $this->sid, $this->Session->read('Auth.User.id'));
 				$this->set('totalPrice',$totalPrice);
+				
+				//za google checkout---------------
 				if($this->data['Order']['payment_option'] == 2){
 					$this->redirect("index/c:$this->c/step:google");
 				}
+				//////////////////////////////////////
 			}else{
 			    $this->Session->setFlash('User data missing!');
 			    $this->redirect(array('action' => "index/c:$c/step:1"));
@@ -68,9 +71,19 @@ class OrdersController extends AppController{
 			    }else{
 			        $orderedProducts = $this->Order->saveOrder($this->data,$this->sid);
 			    }
-				//$this->redirect(array('action' => "index/c:$c"/))
-				//$this->_sendEmail($this->data['Order']['od_payment_email'], 'Your Order has been recieved!',$orderedProducts, 'received_order');
-				$this->Session->delete('Product_ids');
+			    
+			    if($orderedProducts == 'error'){
+			        $this->Session->setFlash('Error, order not received');
+			    }else{
+			        $this->Session->setFlash('Order placed!');	
+			        //nastavi kupljene produkte za prikaz v e-mailu		        
+			        $this->set('orderedProducts',$orderedProducts);
+			        
+				    $this->MyEmail->sendOrderReceivedEmail($this->Auth->user('email'));
+				    $this->redirect(array('action' => "index/c:$c"));   
+			    }
+				
+				
 			}
 		}elseif($this->step == 'paypal'){
 			$paypal = array();
@@ -100,6 +113,28 @@ class OrdersController extends AppController{
 	    $this->paginate = array('limit' => 10, 'order' => 'Order.od_date ASC');
 	    
 	    $this->set('orders', $this->paginate());
+	    
+	    //v primeru da zelimo spremeniti status narocila
+	    if(!empty($this->data)){
+	        $this->Order->id = $this->data['Order']['id'];
+	        $this->Order->saveField('od_status', $this->data['Order']['od_status']);
+	        
+	        $result = $this->Order->get_ordered_items($this->data['Order']['id']);
+	        
+	        //posiljanje emaila s statusom
+	        $this->set('orderedProducts',$result);
+	        $this->set('status', $this->data['Order']['od_status']);
+	        $this->MyEmail->sendOrderStatusEmail($this->data['Order']['od_payment_email']);
+	        $this->redirect($this->referer());
+	    }  
+	}
+	
+	
+	function admin_get_completed_orders(){
+	    $this->paginate = array('conditions' => array('Order.od_status' => 'Completed'));
+	    $total = $this->Order->get_total_payed_orders_sum();
+	    $this->set('orders', $this->paginate());
+	    $this->set('totalSum', $total);
 	}
 	
 	
@@ -112,6 +147,8 @@ class OrdersController extends AppController{
 	
 
 
+	
+	
 	/** SetExpressCheckout NVP example; last modified 08MAY23.
 	 *
 	 *  Initiate an Express Checkout transaction. 

@@ -73,5 +73,24 @@ class AppController extends Controller{
 	}
 	
 	
+    function beforeRender() { 
+        //hack, ki v view-ih omogoci pretvorbo enum field-ov v select box namesto textbox(core)
+        foreach($this->modelNames as $model) { 
+          foreach($this->$model->_schema as $var => $field) { 
+            if(strpos($field['type'], 'enum') === FALSE) 
+              continue; 
+    
+            preg_match_all("/\'([^\']+)\'/", $field['type'], $strEnum); 
+    
+            if(is_array($strEnum[1])) { 
+              $varName = Inflector::camelize(Inflector::pluralize($var)); 
+              $varName[0] = strtolower($varName[0]); 
+              $this->set($varName, array_combine($strEnum[1], $strEnum[1])); 
+            } 
+          } 
+        } 
+    }
+	
+	
 }
 ?>

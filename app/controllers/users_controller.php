@@ -37,11 +37,11 @@ class UsersController extends AppController{
 	
 	function isAuthorized(){	
 		if($this->Auth->user('admin')){
-			pr('this user is admin');
+			
 			//exit;
 			return true;
 		}else{
-			pr('this user is NOT admin');
+			
 			//exit;
 			//$this->Session->setFlash('This area is for admins only!');
 			return false;
@@ -180,6 +180,7 @@ class UsersController extends AppController{
 	function admin_reset_password(){
 	    
 	    $this->set('uid',$this->passedArgs['uid']);
+	    $this->set('uname', $this->passedArgs['uname']);
 	    
 	    if(!empty($this->data)){
 	        $changedPass = $this->data['User']['password'];

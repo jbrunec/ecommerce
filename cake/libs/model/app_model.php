@@ -75,14 +75,14 @@ class AppModel extends Model {
             // to prevent duplicates 
             $this->deleteAssoc($assoc,$assoc_ids,$id); 
             //dodano za upravljanje s poljem
-            
+            $i=0;
             foreach ($assoc_ids as $assoc_id) { 
                 $values[]  = $db->value($id, $this->getColumnType($this->primaryKey)); 
                 $values[]  = $db->value($assoc_id);
                 //dodal: tukaj se shranjujejo vrednosti polja Data
-                foreach($data as $key => $value){
-                    $values[] = $value; 
-                }
+                
+                $values[] = $data[$i]; 
+                
                 
                 $values    = join(',', $values); 
                 

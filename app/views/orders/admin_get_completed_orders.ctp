@@ -1,9 +1,3 @@
-<?php //debug($orders)?>
-<div class="orders index">
-	<h2>Search options</h2>
-	    <?php echo $html->link('Only completed orders', array('controller' => 'orders','action' => 'admin_get_completed_orders', 'admin' => true)); ?>	
-</div>
-
 <div class="orders index">
 	<h2>Orders</h2>
 	<table cellpadding="0" cellspacing="0">
@@ -46,17 +40,14 @@
 		
 		<td class="actions">
 			<?php echo $this->Html->link('View', array('controller' => 'orders','action' => 'admin_view', $order['Order']['id'], 'admin' => true)); ?>
-			<?php 
-			    echo $form->create('Order');
-			    echo $form->hidden('Order.id', array('value' => $order['Order']['id']));
-			    echo $form->hidden('Order.od_payment_email', array('value' => $order['Order']['od_payment_email']));
-			    echo $form->input('Order.od_status', array('label' => 'change status:'));
-			    echo $form->end('submit');
 			
-			?>
 		</td>
 	</tr>
 <?php endforeach; ?>
+	<tr>
+		<td colspan="6">Total sum: </td>
+		<td colspan="1"><strong><?php echo Configure::read('Shop.currency').' '.$totalSum?></strong></td>
+	</tr>
 	</table>
 	<p>
 	<?php
