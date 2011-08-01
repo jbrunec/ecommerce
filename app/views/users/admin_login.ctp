@@ -1,4 +1,4 @@
-<?php debug($session->read())?>
+<?php //debug($session->read())?>
 
 <h2>ADMIN LOGIN PAGE</h2>
 <?php 

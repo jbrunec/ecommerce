@@ -105,7 +105,7 @@ class ProductsController extends AppController{
 			$this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 		}
 		if (!empty($this->data)) {
-		    if(!$this->admin_upload_photo()){
+		    if(!$this->Product->admin_upload_photo()){
 		        //$this->Product->invalidate('file','isUploaded');
 		        $this->Session->setFlash('Incorrect file type');
 		        //$this->render();
@@ -193,6 +193,7 @@ class ProductsController extends AppController{
 	        
 	        $parsed_xml = new Xml($path.$xmlName);
 	        $parsed_xml = Set::reverse($parsed_xml);
+	        
 	        $this->Product->batch_xml_update($parsed_xml);
 	        $this->Session->setFlash('Xml update successful!'); 
 	    }
@@ -201,33 +202,6 @@ class ProductsController extends AppController{
 	    
 	}
 	
-	function admin_upload_photo($file = null){
-	    $path = "img\\products\\";
-	    $dir = WWW_ROOT.$path;
-	    
-	    //trenutna lokacija slike
-	    $image = $this->data['Product']['file']['tmp_name'];
-	    $imageName = $this->data['Product']['file']['name'];
-	    $file = new File($image);
-	    
-	    //preverjanje koncnic za sliko
-	    $ext = $file->ext();	    
-	    if($ext != 'jpg' || $ext != 'jpeg' || $ext != 'png' || $ext != 'gif'){
-	        
-	        return false;
-	    }
-	    
-	    $fileData = $file->read();
-	    $file->close();
-	    
-	    //zapis v nov fajl
-	    $file = new File($dir.$imageName,true);
-	    $file->write($fileData);
-	    $file->close();
-	    
-	    //nastavitev pd_image na ime slike (ker je se vedno array())
-	    $this->data['Product']['pd_image'] = $imageName;
-	    return true;
-	}
+	
 }
 ?>

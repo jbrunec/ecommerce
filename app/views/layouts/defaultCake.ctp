@@ -5,7 +5,7 @@
 	<?php echo $this->Session->flash('email'); ?>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php __('CakePHP: the rapid development php framework:'); ?>
+		Ecommerce app - Admin backend
 		<?php echo $title_for_layout; ?>
 	</title>
 	<style type="text/css">
@@ -17,6 +17,7 @@
             }
     </style>
 	<?php
+	
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
 		echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');		
@@ -27,7 +28,7 @@
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $this->Html->link(__('CakePHP: the rapid development php framework', true), 'http://cakephp.org'); ?></h1>
+			<h1>Ecommerce App - Admin Area</h1>
 		</div>
 		<div id="content">
 
@@ -47,18 +48,18 @@
                 		<li><?php echo $this->Html->link('Add new product', array('controller' => 'products','action' => 'admin_add_product', 'admin' => true));?></li>
                 		<li><?php echo $this->Html->link('Show all products', array('controller' => 'products','action' => 'admin_show_all_products', 'admin' => true));?></li>
                 	</ul>
-                	<br></br>           	
+                	<br>           	
                 	<h3>Users related actions: </h3>
                 	<ul>
                 		<li><?php echo $html->link('Show all registered users', array('controller' => 'users', 'action' => 'admin_show_all_users'));?></li>
                 	</ul>
-                	<br></br>
+                	<br>
                 	<h3>Orders related actions: </h3>
                 	<ul>
                 		<li><?php echo $html->link('Show all orders', array('controller' => 'orders', 'action' => 'admin_get_all_orders'));?></li>
                 		<li><?php echo $html->link('Completed orders', array('controller' => 'orders','action' => 'admin_get_completed_orders', 'admin' => true)); ?></li>
                 	</ul>
-                	<br></br>
+                	<br>
                 	<h3>Admin: </h3>
                 	<ul>
 						<li><?php echo $this->Html->link('Logout', array('controller' => 'users','action' => 'admin_logout', 'admin' => true));?></li>           	

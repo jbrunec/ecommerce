@@ -19,6 +19,7 @@ class CartsController extends AppController{
 	}
 	
 	function getCartContent(){
+	    
 	    if($this->Auth->user()){
 		    return $this->Cart->getCartContent($this->sid, $this->Session->read('Auth.User.id'));
 	    }else{
@@ -73,7 +74,11 @@ class CartsController extends AppController{
 	
 	//ogled vsebine vozicka
 	function view(){
-		$this->Session->delete('Product_ids');
+	    if($this->Auth->user()){
+		    $cartContents = $this->Cart->getCartContent($this->sid, $this->Session->read('Auth.User.id'), 0);
+	    }else{
+	        $cartContents = $this->Cart->getCartContent($this->sid, null, 1);
+	    }
 		$cartContents = $this->getCartContent();
 		
 		$totalPrice = $this->Cart->getCartTotalPrice($cartContents);

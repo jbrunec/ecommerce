@@ -6,9 +6,6 @@
 		$data = $this->requestAction(array('controller' => 'orders', 'action' => 'get_recent_orders'));
 		//pr($products);
 		//pr($data);
-		
-	
-
 
 ?>
 <div id="recent_orders">
@@ -24,6 +21,11 @@
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
 	<?php
+	
+	if(!empty($data)){
+	    
+	
+	
 	$i = 0;
 	foreach ($data as $order):
 		$class = null;
@@ -44,7 +46,13 @@
 			<?php echo $this->Html->link(__('Delete', true), array('action' => 'delete', $order['Order']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $order['Order']['id'])); ?>
 		</td>
 	</tr>
-<?php endforeach; ?>
+    <?php endforeach; ?>
+	<?php }else{?>
+	<tr>
+		<td colspan="1">NO RECENT ORDERS!</td>
+		<td colspan="6">&nbsp;</td>
+	</tr>
+	<?php }?>
 	</table>
 	
 	

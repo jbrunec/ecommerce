@@ -45,6 +45,8 @@
     </tbody>
     <tfoot>
     	<?php $result = $this->requestAction('/carts/isCartEmpty');?>
+    	
+    	
     	<tr>
         	<td colspan="2">&nbsp;</td>
         	<td colspan="1"><?php echo $html->link('Continue shopping', '/carts/index/c:'.$c)?></td>

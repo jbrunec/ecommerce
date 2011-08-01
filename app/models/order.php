@@ -34,7 +34,7 @@ class Order extends AppModel{
 	function saveOrder($orderData, $session_id ,$user_id = null){
 		$time = new TimeHelper();
 		//shrani Order v orders table
-		$orderData['Order']['od_shipping_cost'] = 5.00;
+		//$orderData['Order']['od_shipping_cost'] = Configure::read();
 		$orderData['Order']['od_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
 		$orderData['Order']['od_payment_tax'] = 0.00;
 		

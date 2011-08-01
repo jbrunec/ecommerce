@@ -39,7 +39,7 @@ class Cart extends AppModel{
 		$this->save();
 	}
 	
-	function getCartContent($session_id, $user_id = null){
+	function getCartContent($session_id, $user_id = null, $recursion = null){
 		//$cartContent = array();
 		/*
 		$sql = "SELECT ct.id, ct.product_id, ct.ct_qty, pd.pd_name, pd.pd_description, pd.pd_price, pd.pd_image, pd.category_id
@@ -53,10 +53,18 @@ class Cart extends AppModel{
 			$cartContent[] = $result;
 		}*/
 		
-		//cake verzija querija
-		$this->recursive = 2;
+		//opcijska nastavitev kako globoko naj isce cakephp s funkcijo find
+		/*
+		if(isset($recursion) && !empty($recursion)){
+		    pr($recursion);
+		    //die;
+		    $this->recursive = $recursion;
+		}else{
+		    $this->recursive = 2;
+		}
+		*/
 		
-		
+		$this->recursive = 1;
 		
 		if(!empty($user_id)){
 		    $cartContent = $this->find('all', array('conditions' => array('OR' => array('Cart.user_id' => $user_id, 'Cart.ct_session_id' => $session_id))));

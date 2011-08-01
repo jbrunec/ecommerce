@@ -33,7 +33,7 @@
     }else{
 ?>
 		<tr>
-			<td colspan="5">NO NEW USERS!</td>
+			<td colspan="6">NO NEW USERS!</td>
 		</tr>
 
 	<?php }?>

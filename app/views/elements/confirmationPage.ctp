@@ -1,6 +1,6 @@
 <?php 
 	$result = $this->requestAction("/carts/getCartContent");
-	//debug($this->data);
+	debug($this->data);
 	//debug($totalPrice);
 
 ?>
@@ -31,11 +31,11 @@
 	
 	<?php 
 	//naredimo obrazec za pošiljanje dostavnih podatkov glede na to katero plaèilno opcijo je user izbral
-	if($userInfo['Order']['payment_option'] == 0){
+	if($userInfo['Order']['payment_option'] == 0 || $userInfo['Order']['payment_option'] == 3){
 		echo $form->create('Order', array('controller' => 'orders', 'action' => "index/c:$c/step:cod"));
 	}elseif($userInfo['Order']['payment_option'] == 1){
 		echo $form->create('Order', array('controller' => 'orders', 'action' => "index/c:$c/step:paypal"));
-	}else{
+	}elseif($userInfo['Order']['payment_option'] == 2){
 		echo $form->create('Order', array('controller' => 'orders', 'action' => "index/c:$c/step:google"));
 	}
 	?>
@@ -49,6 +49,10 @@
 	<?php echo $form->input('Order.od_shipping_city',array('value' => $userInfo['Order']['od_shipping_city'], 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_postal_code',array('value' => $userInfo['Order']['od_shipping_postal_code'],'type' => 'hidden'));?>
 	
+	<?php if($userInfo['Order']['payment_option'] == 3){?>
+	    <?php echo $form->hidden('Order.od_shipping_cost', array('value' => Configure::read('Shop.postal_cost')));?>
+	<?php }?>
+	
 	<?php echo $form->input('Order.od_payment_first_name',array('value' => $userInfo['Order']['od_payment_first_name'],'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_payment_last_name',array('value' => $userInfo['Order']['od_payment_last_name'],'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_payment_email',array('value' => $userInfo['Order']['od_payment_email'],'type' => 'hidden'));?>
@@ -59,6 +63,15 @@
 	<?php echo $form->hidden('Order.od_payment_total', array('value' => $totalPrice));?>
 	</tbody>
 	<tfoot>
+	<?php if(!$userInfo['Order']['payment_option'] == 3){?>
+		<?php $totalPrice += Configure::read('Shop.postal_cost');?>
+		<tr>
+    		<td colspan="3">&nbsp;</td>
+    		<td colspan="1">Shipping costs:</td>
+    		<td colspan="1"><?php echo '+ '.Configure::read('Shop.currency').' '.Configure::read('Shop.postal_cost');?></td>
+    	</tr>
+    <?php }?>
+    	
 		<tr>
 			<td colspan="4">&nbsp;</td>
 			<td colspan="1"><?php echo ' ='.Configure::read('Shop.currency').' '.$totalPrice;?></td>

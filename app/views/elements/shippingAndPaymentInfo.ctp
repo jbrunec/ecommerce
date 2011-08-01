@@ -21,7 +21,7 @@
         echo $form->input('od_shipping_postal_code', array('label' => 'Postal Code: ', 'value' => $session->read('Auth.User.postal_code')));
         
         
-        echo $form->radio('Order.payment_option', array('C.O.D.','Paypal','Google Checkout'));
+        echo $form->radio('Order.payment_option', array('C.O.D.','Paypal','Google Checkout','Personal Acquisition'));
        
         
         echo $form->hidden('od_payment_first_name', array('value' => $session->read('Auth.User.first_name')));
