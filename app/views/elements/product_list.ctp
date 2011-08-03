@@ -1,10 +1,10 @@
 <?php 
-	//pr($paging);
+	//debug($products);
 	$html->addCrumb('Products','/carts/index/c:'.$c);
 	
 	if(empty($products) || !isset($products)){
 		$data = $this->requestAction("/products/listProducts/c:$c");
-		//pr($products);
+		pr($data);
 		$products = $data['products'];
 		$this->Paginator->params['paging'] = $data['paging'];
 	}

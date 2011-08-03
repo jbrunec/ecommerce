@@ -75,11 +75,11 @@ class CartsController extends AppController{
 	//ogled vsebine vozicka
 	function view(){
 	    if($this->Auth->user()){
-		    $cartContents = $this->Cart->getCartContent($this->sid, $this->Session->read('Auth.User.id'), 0);
+		    $cartContents = $this->Cart->getCartContent($this->sid, $this->Session->read('Auth.User.id'), 1);
 	    }else{
 	        $cartContents = $this->Cart->getCartContent($this->sid, null, 1);
 	    }
-		$cartContents = $this->getCartContent();
+		
 		
 		$totalPrice = $this->Cart->getCartTotalPrice($cartContents);
 		$i = 0;

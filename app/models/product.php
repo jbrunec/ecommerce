@@ -98,21 +98,24 @@ class Product extends AppModel{
     }
     
     
-    function admin_upload_photo($file = null){
+    function admin_upload_photo($image = null){
 	    $path = "img\\products\\";
 	    $dir = WWW_ROOT.$path;
 	    
 	    //trenutna lokacija slike
-	    $image = $this->data['Product']['file']['tmp_name'];
-	    $imageName = $this->data['Product']['file']['name'];
-	    $file = new File($image);
+	    $imageTmp = $image['Product']['file']['tmp_name'];
+	    $imageName = $image['Product']['file']['name'];
+	    $file = new File($imageTmp);
 	    
 	    //preverjanje koncnic za sliko
-	    $ext = $file->ext();	    
+	    $ext = $file->ext();	  
+	    /*  
 	    if($ext != 'jpg' || $ext != 'jpeg' || $ext != 'png' || $ext != 'gif'){
-	        
+	        pr('Wrong extension - ');
+	        print_r($file);
+	        die;
 	        return false;
-	    }
+	    }*/
 	    
 	    $fileData = $file->read();
 	    $file->close();
@@ -123,8 +126,8 @@ class Product extends AppModel{
 	    $file->close();
 	    
 	    //nastavitev pd_image na ime slike (ker je se vedno array())
-	    $this->data['Product']['pd_image'] = $imageName;
-	    return true;
+	    $image['Product']['pd_image'] = $imageName;
+	    return $image;
 	}
 	
 }

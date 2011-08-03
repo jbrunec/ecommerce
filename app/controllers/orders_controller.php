@@ -80,7 +80,7 @@ class OrdersController extends AppController{
 			        $this->set('orderedProducts',$orderedProducts);
 			        
 				    $this->MyEmail->sendOrderReceivedEmail($this->Auth->user('email'));
-				    $this->redirect(array('action' => "index/c:$c"));   
+				    $this->redirect(array('action' => "index"));   
 			    }
 				
 				
@@ -96,6 +96,15 @@ class OrdersController extends AppController{
 
 		}
 	}
+	
+	
+    function view($id = null){
+	    $order =  $this->Order->find('first', array('conditions' => array('Order.id' => $id)));
+	    $this->set(compact('order'));
+	}
+	
+	
+	
 	//narocila stara 1 dan in manj
 	function get_recent_orders(){
 	    $orders = $this->Order->get_recent_orders();
@@ -105,6 +114,24 @@ class OrdersController extends AppController{
 	        $this->set('orders', $orders);
 	    }
     
+	}
+	
+	//vsa narocila dolocene osebe
+	function get_all_user_orders($email = null){	    
+	    $this->paginate = array('conditions' => array('Order.od_payment_email' => $email), 'order' => 'Order.od_date DESC');
+	    $orders = $this->paginate();
+	    $totalSum = $this->Order->get_total_payed_orders_sum($orders);
+	    $this->set(compact('orders','totalSum'));
+	    
+	    
+	    if(isset($this->params['requested'])){
+	        //$orders['totalSum'] = $totalSum;
+            $orders =  compact('orders','totalSum');
+            //array_push($orders, array('totalSum' => $totalSum));
+            return $orders;
+	    }
+	    
+	    
 	}
 	
 	//za view admin_get_all_orders, prikaze vsa narocila
@@ -144,7 +171,23 @@ class OrdersController extends AppController{
 	}
 	
 	
-	
+	function admin_daily_report(){
+	    $time = new TimeHelper();
+	    
+	    //Y-m-d H:i:s
+	    mktime();
+	    $beginningDay = mktime(0,0,0,8,3,2011);
+	    $now = time();
+	    pr($now);
+	    pr($time->format('Y-m-d H:i:s',$now));
+	    pr($beginningDay);
+	    pr($time->format('Y-m-d H:i:s',$beginningDay));
+	    $timeElapsed = $now - $beginningDay;
+	    pr(date('H:i:s', $timeElapsed));
+	    die;
+	    $totalSum = $this->Order->get_total_payed_orders_sum();
+	    
+	}
 
 
 	

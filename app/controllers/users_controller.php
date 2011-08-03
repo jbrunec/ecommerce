@@ -71,11 +71,12 @@ class UsersController extends AppController{
 			
 			//$this->redirect($this->referer('/carts/index',false));
 	    //se prozi v primeru ko stran usera sama prijavi ob spremembi passworda 
-		}elseif(!empty($credentials)){
+	    
+		}/*elseif(!empty($credentials)){
 		    $this->Auth->login($credentials);
 		    $this->User->updateLastLogin($this->Auth->user('id'));
 		    $this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
-		}
+		}*/
 		
 		
 		
@@ -113,7 +114,8 @@ class UsersController extends AppController{
 	        if($this->User->reset_password($this->data['User']['id'], $this->data)){
 	            $this->Session->setFlash('Password changed successfully!');
 	            $user = $this->User->find('first', array('conditions' => array('User.id' => $this->data['User']['id'])));
-	            $this->login($user);
+	            $this->Auth->login($user);
+	            $this->redirect("index");
 	        }else{
 	            $this->Session->setFlash('Password change failed!');
 	        }

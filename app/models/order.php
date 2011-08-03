@@ -94,7 +94,7 @@ class Order extends AppModel{
 	function get_recent_orders(){
 	    $time = new TimeHelper();
 	    	    
-        $dayAgo = $time->gmt() - 86400;
+        $dayAgo = time() - 86400;
         
         $formatedDayAgo = $time->format("Y-m-d H:i:s",$dayAgo);
 	    $result =  $this->find('all', array('conditions' => array('od_date >=' => $formatedDayAgo)));
@@ -103,16 +103,20 @@ class Order extends AppModel{
 	}
 	
 	//funkcija za racunanje vsote vseh zakljucenih narocil
-	function get_total_payed_orders_sum(){
-	    $result =  $this->find('all', array('conditions' => array('od_status' => 'Completed')));
+	function get_total_payed_orders_sum($orders = null){
+	    if(empty($orders)){
+	        $orders =  $this->find('all', array('conditions' => array('od_status' => 'Completed')));
+	    }
+	    
 	    $totalSum = 0.00;
-	    foreach($result as $order){
+	    foreach($orders as $order){
 	        $totalSum += ($order['Order']['od_payment_total']);
 	    }
 	    
 	    return $totalSum;
 	}
 	
+	//produkti v dolocenem narocilu
 	function get_ordered_items($id){
 	    $result = $this->find('first', array('conditions' => array('Order.id' => $id)));
 	    $orderedProducts = array();
@@ -121,6 +125,12 @@ class Order extends AppModel{
 	    return $result;
 	}
 	
+	
+	function get_orders_by_time($fromDate, $toDate){
+	    $orders = $this->find('all', array('conditions' => array('Order.od_date >=' => $fromDate, 'Order.od_date <=' => $toDate)));
+	    
+	    return $orders;
+	}
 	
 	
 	

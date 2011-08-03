@@ -1,5 +1,6 @@
 <?php
 App::import('File');
+App::import('Sanitize');
 class ProductsController extends AppController{
 	var $name = 'Products';
 	//var $helpers = array('Paginator');
@@ -22,14 +23,10 @@ class ProductsController extends AppController{
 	
 	
 	function isAuthorized(){	
-		if($this->Auth->user('admin')){
-			pr('this user is admin');
-			//exit;
+		if($this->Auth->user('admin')){		
 			return true;
 		}else{
-			pr('this user is NOT admin');
-			//exit;
-			//$this->Session->setFlash('This area is for admins only!');
+			
 			return false;
 		}
 	}
@@ -38,7 +35,7 @@ class ProductsController extends AppController{
 	function listProducts(){
 		
 		$this->autoRender = false;
-		//$this->Product->recursive = 0;
+		$this->Product->recursive = 1;
 		
 		$categories = $this->Product->Category->getAllCategories();
 		$categories = $this->Product->Category->buildCategories($categories,$this->passedArgs['c']);
@@ -46,8 +43,16 @@ class ProductsController extends AppController{
 		$allCatIds = array_merge(array($this->passedArgs['c']),$catChildren);
 		
 		//pr($allCatIds);
-		$this->paginate = array('conditions' => array('Product.category_id' => $allCatIds),'limit' => 2);
+		$this->paginate = array('conditions' => array('Product.category_id' => $allCatIds),'limit' => 10);
 		$data = $this->paginate();
+		
+		//Saniramo html znake iz opisa izdelka
+		$i=0;
+		foreach($data as $product){
+		    $data[$i]['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));
+		    $i++;
+		}
+		
 		$this->set('products',$data);
 		$this->helpers['Paginator'] = array('ajax' => 'Ajax');
 		//pr($this->helpers);		
@@ -78,7 +83,7 @@ class ProductsController extends AppController{
 	
 	function admin_add_product(){
 		if(!empty($this->data)){
-		    if(!$this->admin_upload_photo()){
+		    if(!$this->Product->admin_upload_photo()){
 		        //$this->Product->invalidate('file','isUploaded');
 		        $this->Session->setFlash('Incorrect file type');
 		        //$this->render();
@@ -105,13 +110,17 @@ class ProductsController extends AppController{
 			$this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 		}
 		if (!empty($this->data)) {
-		    if(!$this->Product->admin_upload_photo()){
+		    pr($this->data);
+		    //die;
+		    $product = $this->Product->admin_upload_photo($this->data); 
+		    
+		    if(empty($product)){
 		        //$this->Product->invalidate('file','isUploaded');
 		        $this->Session->setFlash('Incorrect file type');
 		        //$this->render();
 		    }else{
 		        //$this->data['Product']['pd_last_update'] = date('Y-m-d H:i:s', time());
-			    if ($this->Product->save($this->data)) {
+			    if ($this->Product->save($product)) {
 				    $this->Session->setFlash('Product has been edited successfully');
 				    $this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 			    } else {
@@ -148,9 +157,49 @@ class ProductsController extends AppController{
 	function admin_show_all_products(){
 		$this->paginate = array('limit' => 5);
 		//$products = $this->Product->find('all');
-		$this->set('products', $this->paginate());
+	    $data = $this->paginate();
+	    
+	    //Saniramo html znake iz opisa izdelka
+	    $i=0;
+		foreach($data as $product){
+		    $data[$i]['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));
+		    $i++;
+		}
+		$this->set('products', $data);
 		
 		
+	}
+	
+	function admin_get_products_by_category(){
+	    if(!empty($this->data)){
+            $categories = $this->Product->Category->find('list', array('fields' => array('Category.id','Category.cat_name')));
+	        $this->set(compact('categories'));	
+	                
+	        $categories = $this->Product->Category->getAllCategories();
+	        $categories = $this->Product->Category->buildCategories($categories,$this->data['Product']['Category']);
+	        $children = $this->Product->Category->getChildCategories($categories, $this->data['Product']['Category'], true);
+	        $allCatIds = array_merge(array($this->data['Product']['Category']),$children);
+	        //pr($allCatIds);
+	        //die;
+	        $this->paginate = array('conditions' => array('Product.category_id' => $allCatIds));
+	        $data = $this->paginate();
+	        
+    	    //Saniramo html znake iz opisa izdelka
+    	    $i=0;
+    		foreach($data as $product){
+    		    $data[$i]['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));
+    		    $i++;
+    		}
+	        
+	        $this->set('products',$data);
+	        //$this->data = null;
+	    }
+	    else{
+	        $categories = $this->Product->Category->find('list', array('fields' => array('Category.id','Category.cat_name')));
+	        $this->set(compact('categories'));
+	        //$this->data = $this->Product->Category->find('list');
+	    }
+	    
 	}
 	
 	function admin_get_stock_info(){

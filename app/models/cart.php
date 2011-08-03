@@ -54,7 +54,7 @@ class Cart extends AppModel{
 		}*/
 		
 		//opcijska nastavitev kako globoko naj isce cakephp s funkcijo find
-		/*
+		
 		if(isset($recursion) && !empty($recursion)){
 		    pr($recursion);
 		    //die;
@@ -62,9 +62,9 @@ class Cart extends AppModel{
 		}else{
 		    $this->recursive = 2;
 		}
-		*/
 		
-		$this->recursive = 1;
+		
+		//$this->recursive = 1;
 		
 		if(!empty($user_id)){
 		    $cartContent = $this->find('all', array('conditions' => array('OR' => array('Cart.user_id' => $user_id, 'Cart.ct_session_id' => $session_id))));

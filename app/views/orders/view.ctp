@@ -1,4 +1,3 @@
-<?php //debug($order)?>
 <div class="orders view">
 <h2>Order info: </h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>

@@ -18,11 +18,11 @@
 		</dd>
 	</dl>
 	<div class="actions">
-	<h3><?php __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit User', true), array('action' => 'admin_edit_user', $user['User']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('Delete User', true), array('action' => 'admin_delete_user', $user['User']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?> </li>
-	</ul>
-</div>
+    	<h3><?php __('Actions'); ?></h3>
+    	<ul>
+    		<li><?php echo $this->Html->link(__('Edit User', true), array('action' => 'admin_edit_user', $user['User']['id'])); ?> </li>
+    		<li><?php echo $this->Html->link(__('Delete User', true), array('action' => 'admin_delete_user', $user['User']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?> </li>
+    	</ul>
+	</div>
 </div>
 

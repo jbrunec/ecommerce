@@ -51,7 +51,7 @@
 			    echo $form->hidden('Order.id', array('value' => $order['Order']['id']));
 			    echo $form->hidden('Order.od_payment_email', array('value' => $order['Order']['od_payment_email']));
 			    echo $form->input('Order.od_status', array('label' => 'change status:'));
-			    echo $form->end('submit');
+			    echo $form->end('change');
 			
 			?>
 		</td>
