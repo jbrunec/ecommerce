@@ -1,12 +1,13 @@
 <?php  //debug($totalPrice);?>
+
 <?php 
-	debug($cartContents);
+	//debug($cartContents);
 	//echo date("m/d/y",time());
 	$i = 0;
 	
 	echo $html->addCrumb('Your cart contents', array('controller' => 'carts', 'action' => 'view/c:'.$c));
 	
-	echo $form->create('Cart', array('controller' => 'carts', 'action' => 'view'));
+	echo $form->create('Cart', array('controller' => 'carts', 'action' => 'view', 'id' => 'myForm'));
 ?>
 
 <table id="gradient-style" summary="Meeting Results">
@@ -17,6 +18,7 @@
             <th scope="col">Price:</th>
             <th scope="col">Quantity</th>
             <th scope="col">Total:</th>
+            <th scope="col">Actions:</th>
         </tr>
     </thead>
     
@@ -35,7 +37,7 @@
         	<td><?php echo $html->image('products/'.$item['Product']['pd_image'], array('width' => '50', 'height' => '50'));?></td>
             <td><?php echo $item['Product']['pd_name'];?></td>
             <td><?php echo Configure::read('Shop.currency').' '.$item['Product']['pd_price'];?></td>
-            <td><?php echo $form->input('Cart.'.$i.'.ct_qty',array('label' => 'X ','value' => $item['Cart']['ct_qty']));?></td>
+            <td><?php echo $form->select('Cart.'.$i.'.ct_qty',array('1' => '1', '2' => '2', '3' => '3', '4' => '4'),array('selected' => $item['Cart']['ct_qty']),array('onChange' => 'this.form.submit()'));?></td>
             <td><?php echo Configure::read('Shop.currency').' '.$item['Cart']['ct_qty'] * $item['Product']['pd_price'];?></td>
             <td><?php echo $html->link('Remove Item', "/carts/emptyCart/c:$c/ct:".$item['Cart']['id']);?></td>
         </tr>
@@ -45,7 +47,7 @@
     </tbody>
     <tfoot>
     	<?php $result = $this->requestAction('/carts/isCartEmpty');?>
-    	
+    	<?php //$form->select('Cart.'.$i.'.ct_qty',array('label' => 'X ','value' => $item['Cart']['ct_qty']));?>
     	
     	<tr>
         	<td colspan="2">&nbsp;</td>

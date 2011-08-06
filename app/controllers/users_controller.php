@@ -1,4 +1,5 @@
 <?php
+App::import('Sanitize');
 class UsersController extends AppController{
 	
 	var $name = 'Users';
@@ -7,19 +8,22 @@ class UsersController extends AppController{
 	 * @var User
 	 */
 	var $User;
-	//var $Ticket;
+	
 	
 	function beforeFilter(){
+	    if($this->action == 'register' || $this->action == 'admin_edit_user' ){
+            $this->Auth->authenticate = ClassRegistry::init('User');			
+		}
 		parent::beforeFilter();		
 			
 		
 		$this->Auth->autoRedirect = false;
 		$this->Auth->loginRedirect = '/';
 		//doseg za neregistrirane osebe
-		$this->Auth->allow('login','logout','register','admin_login','reset_password','changeUserPassword');
+		$this->Auth->allow('login','logout','register','admin_login','reset_password');
 		if($this->Auth->user()){
 			//doseg za registrirane osebe
-			$this->Auth->allow('login','logout','index','register','admin_login');
+			$this->Auth->allow('login','logout','index','register','admin_login','changeUserPassword','changeUserAddress');
 			
 		}
 		if($this->isAuthorized()){
@@ -29,10 +33,7 @@ class UsersController extends AppController{
 		
 		//$this->Auth->loginError = "false login credentials";
 		//s tem overridamo Auth komponento za User model, da lahko uvedemo svoj hashing paswordov
-		if($this->action == 'register' || $this->action == 'admin_edit_user' ){
-			$this->Auth->authenticate = $this->User;
-			
-		}
+		
 	}
 	
 	function isAuthorized(){	
@@ -49,7 +50,9 @@ class UsersController extends AppController{
 	}
 	
 	function index(){
+		$user = $this->User->findById($this->Session->read('Auth.User.id'));
 		
+		$this->set('user',$user);
 	}
 	
 	function login($credentials = null){
@@ -90,12 +93,17 @@ class UsersController extends AppController{
 	
 	
 	function register(){
+	    
 		if(!empty($this->data)){
+		    debug($this->data);
+		    //Sanitize::clean();
+		    //die;
 				//$this->data['User']['reg_date'] = date("Y-m-d H:i:s", time());
+				//$this->User->set($this->data);
 				$this->User->create();
 				if($this->User->save($this->data)){
 					//$this->User->validates();
-					$this->Auth->login($this->data);
+					//$this->Auth->login($this->data);
 					$this->Session->setFlash('Thank you for registering!'); 
 					//$this->redirect(array('controller' => 'carts', 'action' => 'index'));
 				}
@@ -106,6 +114,7 @@ class UsersController extends AppController{
 	
 	function changeUserPassword(){    
 	    //argument userId pride iz ticket kontrolera ko user v mailu klikne na povezavo z appendanim unikatnim key-em
+	    //userId ne jemljem iz seje zato, ker potem ne bi mogel izvesti operacij iz ticket kontrolera (user ni prijavljen, zato ga ni v seji)
 	    $this->set('userId', $this->data['User']['id']);
 	    
 	    if(!empty($this->data) && isset($this->data['User']['password'])){
@@ -119,6 +128,21 @@ class UsersController extends AppController{
 	        }else{
 	            $this->Session->setFlash('Password change failed!');
 	        }
+	    }
+	}
+	
+	
+	function changeUserAddress(){
+	    //$this->set('userId', $this->data['User']['id']);
+	    
+	    if(!empty($this->data)){
+	        $this->User->id = $this->Session->read('Auth.User.id');
+	        if($this->User->save($this->data)){
+	            $this->Session->setFlash('Your address has been changed successfully!');
+	            $this->redirect('index');
+	        }
+	    }else{
+	        $this->data = $this->User->read(array('address','postal_code','city','phone_number'), $this->Session->read('Auth.User.id'));
 	    }
 	}
 	

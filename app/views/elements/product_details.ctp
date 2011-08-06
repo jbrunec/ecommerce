@@ -1,9 +1,11 @@
 <?php 
-	$html->addCrumb('Products',"/carts/index/c:$c");
-	$html->addCrumb('Product details',"/carts/index/c:$c/p:$p");
+	
+	
 	
 	$product = $this->requestAction("/products/view/p:$p");
 	//$this->Js->get('.lightbox')->event('lightBox', array('buffer' => false));
+	$html->addCrumb('Products',"/carts/index/c:$c");
+	$html->addCrumb('Product details',"/carts/index/c:$c/p:$p");
 ?>
 <script type="text/javascript">
 $(function() {
@@ -49,7 +51,7 @@ $(function() {
 <p>
 <?php 
 	if($product['Product']['pd_qty'] > 0){
-		echo $html->image('addToCart.gif',array('url' => "/carts/addToCart/c:$c/p:".$p)); 
+		echo $html->image('addToCart2.gif',array('url' => "/carts/addToCart/c:$c/p:".$p)); 
 		?>
 		<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
 		<input type="hidden" name="cmd" value="_xclick">

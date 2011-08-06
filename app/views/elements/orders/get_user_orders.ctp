@@ -32,11 +32,11 @@
 		<td><?php echo $order['Order']['id']; ?>&nbsp;</td>
 		<td><?php echo $order['Order']['od_date']; ?>&nbsp;</td>		
 		<?php if($order['Order']['od_status'] == "New"){?>
-			<td><span style="background: lime"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
+			<td><span style="background: lime; color:black;"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
 		<?php }elseif($order['Order']['od_status'] == "Shipped"){?>
 			<td><span style="background: yellow"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
 		<?php }elseif($order['Order']['od_status'] == "Completed"){?>
-			<td><span style="background: #6698FF"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
+			<td><span style="background: #6698FF; color:black"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
 		<?php }elseif($order['Order']['od_status'] == "Cancelled"){?>
 			<td><span style="background: red"><?php echo $order['Order']['od_status']; ?>&nbsp;</span></td>
 		<?php }?>

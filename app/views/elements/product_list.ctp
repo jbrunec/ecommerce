@@ -4,7 +4,7 @@
 	
 	if(empty($products) || !isset($products)){
 		$data = $this->requestAction("/products/listProducts/c:$c");
-		pr($data);
+		//pr($data);
 		$products = $data['products'];
 		$this->Paginator->params['paging'] = $data['paging'];
 	}
@@ -28,10 +28,10 @@
 ?>
 
 
-<div id="product_list">
+
 	<h2>Products:</h2>
 	
-	<table cellpadding="0" cellspacing="0">
+	<table>
 	<tr>
 			<th>&nbsp;</th>
 			<th><?php echo $this->Paginator->sort('Name');?></th>
@@ -50,8 +50,8 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $html->image('products/'.$product['Product']['pd_image'], array('url' => "/carts/index/c:$c/p:".$product['Product']['id'], 'width' =>'50', 'height' => '50'));?></td>
 		<td><?php echo $html->link($product['Product']['pd_name'], array('controller' => 'carts', 'action' => "index/c:$c/p:".$product['Product']['id'])); ?>&nbsp;</td>
-		<td><?php echo $product['Product']['pd_description']; ?>&nbsp;</td>
-		<td id="price"><b><?php echo '&euro;&nbsp;'.$product['Product']['pd_price']; ?>&nbsp;</b></td>
+		<td><?php echo $product['Product']['pd_description']; ?></td>
+		<td><b><?php echo Configure::read('Shop.currency').'&nbsp;'.$product['Product']['pd_price']; ?></b></td>
 	</tr>
 <?php endforeach; ?>
 	</table>
@@ -68,5 +68,5 @@
  |
 		<?php echo $this->Paginator->next(__('next', true) . ' >>', array(), null, array('class' => 'disabled'));?>
 	</div>
-</div>
+
 <?php echo $this->Js->writeBuffer();?>

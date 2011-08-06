@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Products>
+	<product id="5">
+		<operation>update</operation>
+		<pd_qty>5</pd_qty>
+	</product>
+	<product>
+		<operation>insert</operation>
+		<category_id>7</category_id>
+
+		<pd_name>Prenosnik HP ProBook 4530s 2,1 GHz</pd_name>
+		<pd_description>15,6" - 40 cm HD LED (1366 x 768); Intel Core i3 2310M (2,1 GHz, 3 MB L3) ; 3 GB DDR3, 1333 MHz; 320 GB SATA, 7200 obr/min; Intel HD 3000; 2,51 kg </pd_description>
+		<pd_price>599.99</pd_price>
+		<pd_qty>5</pd_qty>
+		<pd_date>2011-08-01 10:30:00</pd_date>
+	</product>
+</Products>

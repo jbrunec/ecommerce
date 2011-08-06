@@ -5,4 +5,6 @@
     echo $form->input('password');
     echo $form->input('password_confirm', array('type' => 'password', 'label' => 'Rewrite password: '));
     echo $form->end('change!');
+
+    echo $html->link('Back',array('controller' => 'users', 'action' => 'index'));
 ?>

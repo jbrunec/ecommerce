@@ -18,6 +18,7 @@
 	<?php
 		echo $this->Html->meta('icon');
 
+		echo $this->Html->css('menu_style');
 		echo $this->Html->css('costumCollapse');
 		echo $this->Html->css('jquery.lightbox-0.5');
 		echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
@@ -36,9 +37,9 @@
 	<h1>The Perfect 3 Column Liquid Layout (Percentage widths)</h1>
 	<h2>No CSS hacks. SEO friendly. No Images. No JavaScript. Cross-browser &amp; iPhone compatible.</h2>
 	<ul>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-3-column.htm" class="active">3 Column <span>Holy Grail</span></a></li>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-3-column-blog-style.htm">3 Column <span>Blog Style</span></a></li>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-2-column-left-menu.htm">2 Column <span>Left Menu</span></a></li>
+		<li><a href="http://localhost/ecommerce/" class="active">Home <span>&nbsp;</span></a></li>
+		<li><a href="http://localhost/ecommerce/users/login">Users <span>Login!</span></a></li>
+		<li><a href="http://localhost/ecommerce/users/index">Your <span>Account</span></a></li>
 		<li><a href="http://matthewjamestaylor.com/blog/perfect-2-column-right-menu.htm">2 Column <span>Right Menu</span></a></li>
 		<li><a href="http://matthewjamestaylor.com/blog/perfect-2-column-double-page.htm">2 Column <span>Double Page</span></a></li>
 		<li><a href="http://matthewjamestaylor.com/blog/perfect-full-page.htm">1 Column <span>Full Page</span></a></li>

@@ -4,7 +4,7 @@
 	$categories = $this->requestAction("/categories/menu/c:$c/");
 	//pr($categories);
 ?>
-<ul>
+<ul id="menu">
 <?php foreach($categories as $category):?>
 	<?php 
 	if($category['cat_parent_id'] == 0){
@@ -13,12 +13,17 @@
 		$level = 2;
 	}
 	
+	
+	
 	if($level == 2){
-		echo '&nbsp;&nbsp;';
-	}
-	
-	
 	?>
-	<li><?php echo $html->link($category['cat_name'], array('controller' => 'carts', 'action' => 'index/c:'.$category['id']));?></li>
+	<li style="background: red;"><?php 	
+	    echo $html->link('---'.$category['cat_name'], array('controller' => 'carts', 'action' => 'index/c:'.$category['id']));	
+	?></li>
+	<?php }else{?>
+		<li>
+			<?php echo $html->link($category['cat_name'], array('controller' => 'carts', 'action' => 'index/c:'.$category['id']));?>
+		</li>
+	<?php }?>
 <?php endforeach;?>
 </ul>

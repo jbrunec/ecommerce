@@ -58,7 +58,7 @@
                 	<br>
                 	<h3>Orders related actions: </h3>
                 	<ul>
-                	    <li><?php echo $html->link('Daily report', array('controller' => 'orders','action' => 'admin_daily_report', 'admin' => true));?></li>           	                	
+                	    <li><?php echo $html->link('Order report', array('controller' => 'orders','action' => 'admin_order_report', 'admin' => true));?></li>           	                	
                 		<li><?php echo $html->link('Show all orders', array('controller' => 'orders', 'action' => 'admin_get_all_orders'));?></li>
                 		<li><?php echo $html->link('Completed orders', array('controller' => 'orders','action' => 'admin_get_completed_orders', 'admin' => true)); ?></li>
                 	</ul>

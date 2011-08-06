@@ -23,6 +23,7 @@
 	<?php
 		echo $this->Html->meta('icon');
 
+		echo $this->Html->css('menu_style');
 		echo $this->Html->css('costum');
 		echo $this->Html->css('jquery.lightbox-0.5');
 		echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js');
@@ -32,20 +33,20 @@
 		echo $this->Html->script('jquery.lightbox-0.5.pack');*/
 		echo $scripts_for_layout;
 	?>
+	<?php echo $session->flash('email');?>
 </head>
 <body>
 
 <div id="header">
 	<p><a href="http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts" title="Perfect multi-column liquid layouts - iPhone compatible">&laquo; Back to the CSS article</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a></p>
-	<h1>The Perfect 3 Column Liquid Layout (Percentage widths)</h1>
+	<h1>CakePHP Powered e-Commerce website!</h1>
 	<h2>No CSS hacks. SEO friendly. No Images. No JavaScript. Cross-browser &amp; iPhone compatible.</h2>
 	<ul>
-		<li><a href="http://localhost/ecommerce/" class="active">3 Column <span>Holy Grail</span></a></li>
+		<li><a href="http://localhost/ecommerce/" class="active">Home <span>&nbsp;</span></a></li>
 		<li><a href="http://localhost/ecommerce/users/login">Users <span>Login!</span></a></li>
-		<li><a href="http://localhost/ecommerce/users/index">Your <span>Account</span></a></li>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-2-column-right-menu.htm">2 Column <span>Right Menu</span></a></li>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-2-column-double-page.htm">2 Column <span>Double Page</span></a></li>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-full-page.htm">1 Column <span>Full Page</span></a></li>
+		<?php if($session->check('Auth.User')){?>
+			<li><a href="http://localhost/ecommerce/users/index">Your <span>Account</span></a></li>
+		<?php }?>
 		<li><a href="http://matthewjamestaylor.com/blog/perfect-stacked-columns.htm">Stacked <span>columns</span></a></li>
 	</ul>
 	<div id="spinner" style="display: none; float:right;">
@@ -94,7 +95,7 @@
 <div id="footer">
 	<?php echo $html->link('Admin login', array('controller' => 'users', 'action' => 'admin_login', 'c' => $c, 'admin' => true));?>
 	<p>This page uses the <a href="http://matthewjamestaylor.com/blog/perfect-3-column.htm">Perfect 'Holy Grail' 3 Column Liquid Layout</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a>. View more <a href="http://matthewjamestaylor.com/blog/-website-layouts">website layouts</a> and <a href="http://matthewjamestaylor.com/blog/-web-design">web design articles</a>.</p>
-	<?php echo $session->flash('email');?>
+	
 	<?php echo $this->element('sql_dump');?>
 </div>
 

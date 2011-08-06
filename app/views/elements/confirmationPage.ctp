@@ -1,6 +1,6 @@
 <?php 
 	$result = $this->requestAction("/carts/getCartContent");
-	debug($this->data);
+	//debug($this->data);
 	//debug($totalPrice);
 
 ?>

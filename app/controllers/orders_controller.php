@@ -23,13 +23,9 @@ class OrdersController extends AppController{
 	
 	function isAuthorized(){
 	    if($this->Auth->user('admin')){
-			pr('this user is admin');
-			//exit;
 			return true;
 		}else{
-			pr('this user is NOT admin');
-			//exit;
-			//$this->Session->setFlash('This area is for admins only!');
+
 			return false;
 		}
 	}
@@ -120,7 +116,7 @@ class OrdersController extends AppController{
 	function get_all_user_orders($email = null){	    
 	    $this->paginate = array('conditions' => array('Order.od_payment_email' => $email), 'order' => 'Order.od_date DESC');
 	    $orders = $this->paginate();
-	    $totalSum = $this->Order->get_total_payed_orders_sum($orders);
+	    $totalSum = $this->Order->get_total_payed_orders_sum($orders, true);
 	    $this->set(compact('orders','totalSum'));
 	    
 	    
@@ -171,24 +167,107 @@ class OrdersController extends AppController{
 	}
 	
 	
-	function admin_daily_report(){
+	function admin_order_report(){
 	    $time = new TimeHelper();
+	    
+	    
+	    if(!empty($this->data)){
+	        //pr($this->data);
+	        if($this->data['Order']['option'] == 'today'){
+	            $todayStart = mktime(0,0,0,date('m'),date('d'),date('Y'));
+	            
+	            pr(date('Y-m-d H:i:s',$todayStart));
+	            pr(date('H:i:s',time() - $todayStart));
+	            //die;
+	            //$this->paginate = array('conditions' => array('Order.od_date >=' => $todayStart));
+	            $this->paginate = array('conditions' => array($time->daysAsSql($todayStart, time(), 'Order.od_date')));
+	            
+	            $orders = $this->paginate();
+	            $countNum = count($orders);
+	            $this->set('orders',$orders);
+	            $this->set('totalNum', $countNum);
+	            if($countNum == 0){
+	                $totalSum = 0.00;                                               
+	            }else{
+	                $totalSum = $this->Order->get_total_payed_orders_sum($orders);            
+	            }
+	            $this->set('totalSum', $totalSum); 
+	        }elseif($this->data['Order']['option'] == 'yesterday'){
+	            $yesterdayStart = mktime(0,0,0,date('m'),date('d')-1,date('Y'));
+	            $yesterdayEnd = mktime(23,59,0,date('m'),date('d')-1,date('Y'));
+	            //pr(date('Y-m-d H:i:s',$yesterdayStart));
+	            //die;
+	            
+	            $this->paginate = array('conditions' => array('Order.od_date >' => date('Y-m-d H:i:s',$yesterdayStart), 'Order.od_date <' => date('Y-m-d H:i:s',$yesterdayEnd)));
+	            //$this->paginate = array('conditions' => array($time->daysAsSql($yesterdayStart, $yesterdayEnd, 'Order.od_date')));
+	            $orders = $this->paginate();
+	            $countNum = count($orders);
+	            if($countNum == 0){
+	                $totalSum = 0.00;                                               
+	            }else{
+	               $totalSum = $this->Order->get_total_payed_orders_sum($orders);
+	            }
+	            $this->set('totalSum', $totalSum); 
+	            $this->set('orders',$orders);	            
+    	        $this->set('totalNum', $countNum);
+	        }else{
+    	        $hour = $this->data['Order']['startDate']['hour'];
+    	        $minute = $this->data['Order']['startDate']['min'];
+    	        $year = $this->data['Order']['startDate']['year'];
+    	        $month = $this->data['Order']['startDate']['month'];
+    	        $day = $this->data['Order']['startDate']['day'];
+    	        $start = @mktime($hour,$minute,0,$month,$day,$year);
+    	        
+    	        $hour = $this->data['Order']['endDate']['hour'];
+    	        $minute = $this->data['Order']['endDate']['min'];
+    	        $year = $this->data['Order']['endDate']['year'];
+    	        $month = $this->data['Order']['endDate']['month'];
+    	        $day = $this->data['Order']['endDate']['day'];
+    	        $end = @mktime($hour,$minute,0,$month,$day,$year);
+    	        
+    	        $this->paginate = array('conditions' => array($time->daysAsSql($start, $end, 'Order.od_date'), 'Order.od_status' => 'Completed'));
+    	        $orders = $this->paginate();
+    	        $countNum = count($orders);
+    	        $this->set('orders', $orders);
+    	        $this->set('totalNum', $countNum);
+    	        
+    	        $totalSum = $this->Order->get_total_payed_orders_sum($orders);
+    	        $this->set('totalSum', $totalSum);
+	        }
+	        
+	        
+	    }
 	    
 	    //Y-m-d H:i:s
 	    mktime();
-	    $beginningDay = mktime(0,0,0,8,3,2011);
-	    $now = time();
+	    $beginningDay = mktime(0,0,0,8,2,2011);
+	    
+	    /*
 	    pr($now);
 	    pr($time->format('Y-m-d H:i:s',$now));
 	    pr($beginningDay);
 	    pr($time->format('Y-m-d H:i:s',$beginningDay));
-	    $timeElapsed = $now - $beginningDay;
+	    $timeElapsed = time() - $beginningDay;
 	    pr(date('H:i:s', $timeElapsed));
-	    die;
-	    $totalSum = $this->Order->get_total_payed_orders_sum();
 	    
+	    pr($timeElapsed/60/60);
+	    //die;
+	    
+	    $orders = $this->Order->find('all', array('conditions' => array($time->daysAsSql($beginningDay, time(), 'Order.od_date'))));
+	    $totalSum = $this->Order->get_total_payed_orders_sum($orders);
+	    $this->set('orders', $orders);
+	    */
 	}
 
+	function admin_report_pdf(){
+	    $orders = $this->Order->find('all');
+	    //pr($orders);
+	    //die;
+	    //Configure::write('debug', 0);
+	    $this->layout = 'pdf';
+	    $this->set('orders', $orders);
+	    $this->render();
+	}
 
 	
 	

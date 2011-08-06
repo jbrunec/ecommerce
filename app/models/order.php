@@ -35,7 +35,7 @@ class Order extends AppModel{
 		$time = new TimeHelper();
 		//shrani Order v orders table
 		//$orderData['Order']['od_shipping_cost'] = Configure::read();
-		$orderData['Order']['od_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
+		$orderData['Order']['od_date'] = $time->format("Y-m-d H:i:s", time());
 		$orderData['Order']['od_payment_tax'] = 0.00;
 		
 		$this->save($orderData);
@@ -103,9 +103,11 @@ class Order extends AppModel{
 	}
 	
 	//funkcija za racunanje vsote vseh zakljucenih narocil
-	function get_total_payed_orders_sum($orders = null){
-	    if(empty($orders)){
+	function get_total_payed_orders_sum($orders = null, $enforce = false){
+	    if(empty($orders) && $enforce = false){
 	        $orders =  $this->find('all', array('conditions' => array('od_status' => 'Completed')));
+	    }elseif ($enforce){
+	        
 	    }
 	    
 	    $totalSum = 0.00;

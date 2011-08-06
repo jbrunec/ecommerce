@@ -24,7 +24,7 @@ class AppController extends Controller{
 		if (isset($this->params['requested'])) {
 			$this->Auth->allow($this->action);
 		}
-		
+	    
 		
 		//nastavitev login parametrov za komponento
 		$this->Auth->fields = array(
@@ -32,7 +32,7 @@ class AppController extends Controller{
 			'password' => 'password'	
 			);
 		//$this->Auth->autoRedirect = false;
-		//$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
+		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
 		
 		//$this->Auth->allow('display');
 		//$this->Auth->authorize = 'action';
