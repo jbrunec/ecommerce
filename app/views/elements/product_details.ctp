@@ -53,16 +53,7 @@ $(function() {
 	if($product['Product']['pd_qty'] > 0){
 		echo $html->image('addToCart2.gif',array('url' => "/carts/addToCart/c:$c/p:".$p)); 
 		?>
-		<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-		<input type="hidden" name="cmd" value="_xclick">
-		<input type="hidden" name="amount" value='<?php echo $product['Product']['pd_price']?>'>
-		<input type="hidden" name="business" value='usshop_1310216713_biz@gmail.com'>
-		<input type="hidden" name="item_name" value='<?php echo $product['Product']['pd_name'] ?>'>
 		
-		<?php // echo $html->image('https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_LG.gif',array('url' => "/carts/addToCart/c:$c/p:".$p));?>
-		<input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-		<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-		</form>
 		
 		<?php 
 	}else{

@@ -7,9 +7,11 @@
 		$total = 0;
 	
 ?>
-	<tr>
-		<th colspan="2">cart content</td>
-	</tr>
+	<thead>
+		<tr>
+			<th colspan="2" style="text-align: left;"><?php echo $html->image('minicart.gif', array('height' => '25', 'width' => '25'));?>Cart content</th>			
+		</tr>
+	</thead>
 	<?php 
 		foreach ($cartContents as $cartContent):
 			$total += $cartContent['Product']['pd_price'] * $cartContent['Cart']['ct_qty'];
@@ -36,7 +38,13 @@
 	
 	<?php 
 	}else{
-		echo '<tr><td width="150">Shopping cart is empty</td></tr>';
+		?>
+		<tr>
+			<td colspan="1"><?php echo $html->image('minicart.gif', array('height' => '50', 'width' => '50'));?></td>
+			<td colspan="1">Your shopping cart is empty!</td>
+			
+		</tr>
+		<?php 
 	}
 	?>
 </table>

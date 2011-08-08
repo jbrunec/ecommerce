@@ -170,6 +170,7 @@ class UsersController extends AppController{
 	
 	function admin_login(){
 		if($this->Auth->user('admin')){
+		    
 			$this->Session->setFlash('Hey Admin!');
 			$this->redirect(array('controller' => 'users', 'action' => 'admin_index', 'admin' => true));
 			exit();

@@ -50,7 +50,14 @@
                 	    <li><?php echo $this->Html->link('Products by category', array('controller' => 'products','action' => 'admin_get_products_by_category', 'admin' => true));?></li>           	
                 	
                 	</ul>
-                	<br>           	
+                	<br> 
+                	<h3>Category actions:</h3>
+                	<ul>
+                		<li><?php echo $html->link('Add new category', array('controller' => 'categories', 'action' => 'admin_add'));?></li>
+                	    <li><?php echo $html->link('Show all categories', array('controller' => 'categories', 'action' => 'admin_index'));?></li>
+              	
+                	</ul>
+                	<br>          	
                 	<h3>Users related actions: </h3>
                 	<ul>
                 		<li><?php echo $html->link('Show all registered users', array('controller' => 'users', 'action' => 'admin_show_all_users'));?></li>

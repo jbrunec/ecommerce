@@ -50,6 +50,7 @@
 <div id="elementsToOperateOn">
 	<legend>Shipping info</legend>
 	<?php echo $form->create('Order', array('controller' => 'orders', 'action' => "index/c:$c/step:2", 'name' => 'formCheckout'));?>
+	<?php //echo $form->input('User.id', array('value' => 'New', 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_status', array('value' => 'New', 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_first_name', array('label' => 'First name: '));?>
 	<?php echo $form->input('Order.od_shipping_last_name', array('label' => 'Last name: '));?>

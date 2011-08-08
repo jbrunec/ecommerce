@@ -306,11 +306,11 @@ label {
 	margin-bottom:3px;
 }
 input, textarea {
-	clear: both;
-	font-size: 140%;
+	clear:both;
+	font-size: 120%;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
 	padding: 1%;
-	width:98%;
+	width:50%;
 }
 select {
 	clear: both;
@@ -428,8 +428,9 @@ div.actions ul li a:hover {
 input[type=submit],
 div.actions ul li a,
 td.actions a {
+	
 	font-weight:normal;
-	padding: 4px 8px;
+	padding: 4px 4px;
 	background:#e6e49f;
 	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
 	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);

@@ -1,6 +1,6 @@
 <?php 
 	$result = $this->requestAction("/carts/getCartContent");
-	//debug($this->data);
+	debug($this->data);
 	//debug($totalPrice);
 
 ?>
@@ -40,7 +40,7 @@
 	}
 	?>
 	
-	<?php echo $form->hidden('User.id', array('value' => $userInfo['User']['id']))?>
+	<?php echo @$form->hidden('User.id', array('value' => $userInfo['User']['id']))?>
 	<?php echo $form->input('Order.od_status', array('value' => 'New', 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_first_name', array('value' => $userInfo['Order']['od_shipping_first_name'], 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_last_name', array('value' => $userInfo['Order']['od_shipping_last_name'], 'type' => 'hidden'));?>
@@ -49,7 +49,7 @@
 	<?php echo $form->input('Order.od_shipping_city',array('value' => $userInfo['Order']['od_shipping_city'], 'type' => 'hidden'));?>
 	<?php echo $form->input('Order.od_shipping_postal_code',array('value' => $userInfo['Order']['od_shipping_postal_code'],'type' => 'hidden'));?>
 	
-	<?php if($userInfo['Order']['payment_option'] == 3){?>
+	<?php if($userInfo['Order']['payment_option'] == 0){?>
 	    <?php echo $form->hidden('Order.od_shipping_cost', array('value' => Configure::read('Shop.postal_cost')));?>
 	<?php }?>
 	
@@ -63,7 +63,7 @@
 	<?php echo $form->hidden('Order.od_payment_total', array('value' => $totalPrice));?>
 	</tbody>
 	<tfoot>
-	<?php if(!$userInfo['Order']['payment_option'] == 3){?>
+	<?php if($userInfo['Order']['payment_option'] == 0){?>
 		<?php $totalPrice += Configure::read('Shop.postal_cost');?>
 		<tr>
     		<td colspan="3">&nbsp;</td>

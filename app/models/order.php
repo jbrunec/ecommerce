@@ -63,13 +63,11 @@ class Order extends AppModel{
 		    $orderQty[$i] = $item['Cart']['ct_qty'];
 		    $i++;
 		}
-		
-		
+				
 		$this->addAssoc('Product', $product_ids, $order_id, $orderQty);
 		
 		
-		//updatanje zaloge v tabeli products
-		
+		//updatanje zaloge v tabeli products		
 		$products = array();	
 		foreach($result as $item){
 			array_push($products, $item['Product']);
@@ -83,9 +81,9 @@ class Order extends AppModel{
 			$this->Product->Cart->emptyCart($item['Cart']['id']);
 		}
 		
+		$order = $this->findById($order_id);
 		
-		
-		return $result;
+		return $order;
 		
 		
 	}

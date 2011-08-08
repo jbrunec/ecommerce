@@ -249,7 +249,7 @@ class User extends AppModel {
     //funkcija za vracanje novo registriranih userov (1 dan)
     function get_new_users(){
         $time = new TimeHelper();
-        $dayAgo = $time->gmt() - 86400;
+        $dayAgo = time() - 86400;
         $formatedDayAgo = $time->format("Y-m-d H:i:s",$dayAgo);
         
         return $this->find('all', array('conditions' => array('User.reg_date >=' => $formatedDayAgo)));

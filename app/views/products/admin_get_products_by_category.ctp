@@ -43,7 +43,6 @@ if(isset($this->data)){
 		<td><?php echo $product['Product']['pd_date']; ?>&nbsp;</td>
 		<td><?php echo $product['Product']['pd_last_update']; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link('View', array('action' => 'view', $product['Product']['id'])); ?>
 			<?php echo $this->Html->link('Edit', array('action' => 'admin_edit_product', $product['Product']['id'], 'admin' => true)); ?>
 			<?php echo $this->Html->link('Delete', array('action' => 'admin_delete_product', $product['Product']['id'], 'admin' => true), null, sprintf(__('Are you sure you want to delete # %s?', true), $product['Product']['id'])); ?>
 		</td>

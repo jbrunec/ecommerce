@@ -63,9 +63,9 @@ class OrdersController extends AppController{
 		}elseif ($this->step == 'cod'){
 			if(!empty($this->data)){
 			    if($this->Auth->user()){
-			        $orderedProducts = $this->Order->saveOrder($this->data, $this->sid ,$this->data['User']['id']);
+			        $order = $this->Order->saveOrder($this->data, $this->sid ,$this->data['User']['id']);
 			    }else{
-			        $orderedProducts = $this->Order->saveOrder($this->data,$this->sid);
+			        $order = $this->Order->saveOrder($this->data,$this->sid);
 			    }
 			    
 			    if($orderedProducts == 'error'){
@@ -73,9 +73,9 @@ class OrdersController extends AppController{
 			    }else{
 			        $this->Session->setFlash('Order placed!');	
 			        //nastavi kupljene produkte za prikaz v e-mailu		        
-			        $this->set('orderedProducts',$orderedProducts);
+			        $this->set('order',$order);
 			        
-				    $this->MyEmail->sendOrderReceivedEmail($this->Auth->user('email'));
+				    $this->MyEmail->sendOrderReceivedEmail($this->data['Order']['od_payment_email']);
 				    $this->redirect(array('action' => "index"));   
 			    }
 				

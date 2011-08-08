@@ -110,17 +110,28 @@ class ProductsController extends AppController{
 			$this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 		}
 		if (!empty($this->data)) {
-		    pr($this->data);
-		    //die;
-		    $product = $this->Product->admin_upload_photo($this->data); 
 		    
-		    if(empty($product)){
+		    //pogledamo ce je file upload prazen
+		    if($this->data['Product']['file']['error'] == 4){
+		         //ce je file prazen in je forma submitala polje 'image', to pomeni da je produkt ze vseboval sliko
+		         if(!empty($this->data['Product']['image'])){
+		             //ker produkt vsebuje sliko, ime slike v bazi shranimo nazaj v $this->data tako da se ob ponovnem shranjevanju produkta ta ne prepise s praznim poljem
+		             $this->data['Product']['pd_image'] = $this->data['Product']['image'];
+		         }else{
+		             $this->data['Product']['pd_image'] = null;
+		         }
+		    //ce fajl submit ni prazen, pomeni da moremo sliko na novo shraniti oziroma prepisati
+		    }else{
+		        $this->data['Product']['pd_image'] = $this->Product->admin_upload_photo($this->data);
+		    }
+		    
+		    if(empty($this->data)){
 		        //$this->Product->invalidate('file','isUploaded');
 		        $this->Session->setFlash('Incorrect file type');
 		        //$this->render();
 		    }else{
 		        //$this->data['Product']['pd_last_update'] = date('Y-m-d H:i:s', time());
-			    if ($this->Product->save($product)) {
+			    if ($this->Product->save($this->data)) {
 				    $this->Session->setFlash('Product has been edited successfully');
 				    $this->redirect(array('action' => 'admin_show_all_products', 'admin' => true));
 			    } else {

@@ -30,13 +30,13 @@ class Product extends AppModel{
 		);
 		
 		
-		
+	/*	
 	var $validate = array(
 	    'file' => array(
 	        'rule' => array('isUploadedFile','file'),
 	        'message' => 'Error uploading file!'
 	    ),
-	);
+	);*/
 	
 	function listProducts($catId = null){
 		$results = $this->find('all', array('conditions' => array('Product.category_id' => $catId),
@@ -126,8 +126,8 @@ class Product extends AppModel{
 	    $file->close();
 	    
 	    //nastavitev pd_image na ime slike (ker je se vedno array())
-	    $image['Product']['pd_image'] = $imageName;
-	    return $image;
+	    
+	    return $imageName;
 	}
 	
 }
