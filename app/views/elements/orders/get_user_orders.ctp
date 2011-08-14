@@ -2,7 +2,7 @@
 
     $orders = $this->requestAction("/orders/get_all_user_orders/".$session->read('Auth.User.email'));
     
-   //pr($orders);
+    //pr($orders);
     
     
 ?>
@@ -22,11 +22,13 @@
 	<?php 
 	
 	$i=0;
+	$totalShippingCost = 0.00;
 	foreach ($orders['orders'] as $order):
 		$class = null;
 		if ($i++ % 2 == 0) {
 			$class = ' class="altrow"';
 		}
+		$totalShippingCost += ($order['Order']['od_shipping_cost']);
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $order['Order']['id']; ?>&nbsp;</td>
@@ -51,10 +53,11 @@
 	
 	</tbody>
 	<?php endforeach; ?>
+	<?php $totalSum = $orders['totalSum']+$totalShippingCost?>
 	<tfoot>
 		<tr>
     		<td colspan="5">Total sum: </td>
-    		<td colspan="1"><strong><?php echo Configure::read('Shop.currency').' '.$orders['totalSum']?></strong></td>
+    		<td colspan="1"><strong><?php echo Configure::read('Shop.currency').' '.$totalSum?></strong></td>
 		</tr>
 	</tfoot>
 

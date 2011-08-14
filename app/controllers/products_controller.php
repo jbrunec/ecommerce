@@ -72,14 +72,28 @@ class ProductsController extends AppController{
 	}
 	
 	
-	function view(){
-		$result = $this->Product->read(null,$this->passedArgs['p']);
+	function view($id = null){
+	    if(!empty($id)){
+	        $result = $this->Product->read(null,$id);
+	    }else{
+	        $result = $this->Product->read(null,$this->passedArgs['p']);
+	    }
+		
 		$this->set('product',$result);
 		
-		if($this->params['requested']){
+		if(isset($this->params['requested'])){
 			return $result;
+		}else{
+		    $this->render('/elements/product_details');
 		}
 	}
+	
+	function get_featured_products(){
+	    $featuredProducts = $this->Product->get_featured_products();
+	    
+	    return $featuredProducts;
+	}
+	
 	
 	function admin_add_product(){
 		if(!empty($this->data)){

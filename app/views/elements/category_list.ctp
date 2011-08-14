@@ -1,37 +1,48 @@
 <?php 
 	//$html->addCrumb('Categories','/');
-	$categories = $this->requestAction("/categories/getAllCategories");
-	//pr($categories);
-	$i=0;
-	$num = count($categories);
-
+	$featured = $this->requestAction("/products/get_featured_products");
+	
+    //pr($featured);
 ?>
-<table id="gradient-style">
-	<thead>
-		<tr>
-			<th>Categories:</th>
-			<th>Description:</th>
-		</tr>
-		
-			
-
-	</thead>
-<?php foreach($categories as $category):?>
-	
-	<tr>
-		<td>
-		<?php 	
-		if($category['Category']['cat_parent_id'] != 0){	
-		    echo $html->link('^----'.$category['Category']['cat_name'], '/carts/index/c:'.$category['Category']['id']); 			
-		}else{
-		    echo $html->link($category['Category']['cat_name'], '/carts/index/c:'.$category['Category']['id']); 					    
-		}
-		?>
-		</td>
-		<td><?php echo $category['Category']['cat_description']?></td>
-	</tr>
-	
-		
-	
-<?php endforeach;?>
-</table>
+<div style="clear: both;"></div>
+    <div class="featured">   	
+		<ul>
+    	<?php foreach($featured as $product):?>
+    		<?php 
+    		$this->ImageResizer->load($product['Product']['pd_image']);
+    		$this->ImageResizer->resizeToHeight(110);
+    		$imgHeight = $this->ImageResizer->getHeight();
+    		$imgWidth = $this->ImageResizer->getWidth();
+    		$imgTopMargin = $this->ImageResizer->getTopMargin();
+    		$imgBottomMargin = $this->ImageResizer->getBottomMargin();
+    		//$this->ImageResizer->outputImage();
+    	    
+    		$title = substr($product['Product']['pd_name'], 0, 18);
+    		?>
+    		<?php $product['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));?>
+              <li>
+              	<h3><?php echo $title;?></h3>
+              	<h1>
+              	    <a href="<?php echo $html->url(array('controller' => 'products', 'action' => 'view', $product['Product']['id']))?>">
+              	    	<span>
+              	    		<?php echo $html->image('products/'.$product['Product']['pd_image'], array('width' => $imgWidth, 'height' => $imgHeight, 'style' => "margin-top:{$imgTopMargin}px;margin-bottom:{$imgBottomMargin}px;"));?>
+              	    	</span>
+              	    </a>     	
+              	</h1>
+              	<p>
+              	    <?php echo $product['Product']['pd_description'];?><br>
+              		<span>
+              			<em>Price:</em>
+              			<big><?php echo $product['Product']['pd_price'];?></big>
+              		</span>
+              	</p>
+              	<blockquote></blockquote>
+              </li>
+  	
+    	<?php endforeach; ?>
+    	</ul>   	
+    </div>
+    
+    
+    
+<?php //echo $html->image('products/'.$product['Product']['pd_image'], array('width' => $imgWidth, 'height' => $imgHeight, 'url' => array('controller' => 'products', 'action' => 'view', $product['Product']['id'])));?>

@@ -1,8 +1,10 @@
 <?php 
 	
 	
+	if(empty($product)){
+	    $product = $this->requestAction("/products/view/p:$p");
+	}
 	
-	$product = $this->requestAction("/products/view/p:$p");
 	//$this->Js->get('.lightbox')->event('lightBox', array('buffer' => false));
 	$html->addCrumb('Products',"/carts/index/c:$c");
 	$html->addCrumb('Product details',"/carts/index/c:$c/p:$p");

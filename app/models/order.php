@@ -116,6 +116,8 @@ class Order extends AppModel{
 	    return $totalSum;
 	}
 	
+	
+	
 	//produkti v dolocenem narocilu
 	function get_ordered_items($id){
 	    $result = $this->find('first', array('conditions' => array('Order.id' => $id)));

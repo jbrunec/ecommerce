@@ -1,7 +1,7 @@
 <?php
 class AppController extends Controller{
 	
-	var $helpers = array('Form','Html','Session','Js','Paginator','Time');
+	var $helpers = array('Form','Html','Session','Js','Paginator','Time','ImageResizer');
 	var $components = array('Session','RequestHandler','MyEmail','Auth');
 	
 	//id kategorije v parametru

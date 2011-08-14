@@ -130,5 +130,12 @@ class Product extends AppModel{
 	    return $imageName;
 	}
 	
+	
+	function get_featured_products(){
+	    $this->recursive = 0;
+	    $results = $this->find('all',array('conditions' => array('Product.pd_featured' => true)));
+	    return $results;
+	}
+	
 }
 ?>

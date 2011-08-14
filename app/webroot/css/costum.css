@@ -882,4 +882,89 @@ form .submit input[type=submit]:hover {
 	background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
 }
 
+/**
+FEATURED PRODUCTS DIVS
+**/
 
+.featured{
+	
+	overflow: hidden; 
+	position: relative;
+	
+}
+
+.featured ul li {
+	
+	list-style: none;
+	
+}
+.featured li {
+	
+	margin-left: 1%;
+	float: left;	
+	width: 24%;	
+}
+.featured li h3, .featured li p, .featured li h1{	
+	padding: 5px 5px 5px 15px;
+/*  	margin-left: 10px;  */
+	 
+}
+.featured li h3{	
+	
+	margin-top: 10px;
+	
+	 
+}
+.featured li p{
+	/* background:#b9c9fe; */
+	background: #b9c9fe;
+	font-size:small;
+	background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.19, rgb(185,201,254)),
+    color-stop(0.59, rgb(255,255,255))
+);
+	
+}
+.featured li h1 a{
+	display: block;
+	width: 100%	
+	
+}
+.featured li h1 span{
+	display: block;
+	text-align: center;	
+	
+}
+
+.featured li p span{
+	position: relative;
+	display: block;
+	height: 1px;
+	margin-top: 5px;
+	padding-top: 5px;
+	background: url("../img/dot_gray.gif") repeat-x;	
+}
+.featured li p span em{
+	float: left;
+	padding-bottom: 10px;	
+}
+.featured li p span big{
+	color: red;
+	font-size: 1.6em;
+	float: right;
+	padding-bottom: 10px;
+}
+
+
+/* .featured blockquote{ */
+/* 	background: white; */
+/* 	clear: both; */
+/* 	position: absolute; */
+/* 	display: block; */
+/* 	top: 0; */
+/* 	width: 10px; */
+/* 	height: 1000px;	 */
+/* } */

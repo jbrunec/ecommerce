@@ -1,14 +1,10 @@
 <div class="orders view">
 <h2>Order info: </h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>>id</dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $order['Order']['id']; ?>
-			&nbsp;
-		</dd>
+	
 		<dt<?php if ($i % 2 == 0) echo $class;?>>Date:</dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $order['Order']['od_date']; ?>
+			<?php echo $time->nice($order['Order']['od_date']); ?>
 			&nbsp;
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>>Status:</dt>
