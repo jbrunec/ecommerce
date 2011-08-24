@@ -38,13 +38,10 @@ class UsersController extends AppController{
 	
 	function isAuthorized(){	
 		if($this->Auth->user('admin')){
-			
-			//exit;
+
 			return true;
 		}else{
 			
-			//exit;
-			//$this->Session->setFlash('This area is for admins only!');
 			return false;
 		}
 	}
@@ -56,30 +53,19 @@ class UsersController extends AppController{
 	}
 	
 	function login($credentials = null){
-	    pr($this->referer());
-	    //die;
+	    
 		if($this->Auth->user()){
 			//$this->Session->write();
 			$this->User->updateLastLogin($this->Auth->user('id'), $this->Session->read('Config.userAgent'));
-			if($this->referer() != "/users/login"){
-			    pr('in referer redirection');
-			    //die;
+			if($this->referer() != "/users/login"){			   
 			    $this->redirect($this->referer());
-			}else{
-			    pr('in regular redirection!');
-			    //die;
+			}else{		    
 			    $this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
 			}
 			
 			
-			//$this->redirect($this->referer('/carts/index',false));
-	    //se prozi v primeru ko stran usera sama prijavi ob spremembi passworda 
 	    
-		}/*elseif(!empty($credentials)){
-		    $this->Auth->login($credentials);
-		    $this->User->updateLastLogin($this->Auth->user('id'));
-		    $this->redirect(array('controller' => 'carts', 'action' => 'index'), null, true);
-		}*/
+		}
 		
 		
 		

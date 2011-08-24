@@ -47,6 +47,7 @@
 			<?php echo Configure::read('Shop.currency').' '.$order['Order']['od_payment_total']; ?>
 			&nbsp;
 		</dd>
+		
 	</dl>
 </div>
 <br>

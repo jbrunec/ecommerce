@@ -46,7 +46,7 @@ $(function() {
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>>Price: </dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo Configure::read('Shop.currency').' '.$product['Product']['pd_price']; ?>
+			<strong><?php echo Configure::read('Shop.currency').' '.$product['Product']['pd_price']; ?></strong>
 			&nbsp;
 		</dd>
 </dl>

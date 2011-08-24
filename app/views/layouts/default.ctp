@@ -9,7 +9,7 @@
 	
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		Ecommerce shop!
+		Ecommerce shop! - 
 		<?php echo $title_for_layout; ?>
 	</title>
 	<style type="text/css">
@@ -38,16 +38,15 @@
 <body>
 
 <div id="header">
-	<p><a href="http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts" title="Perfect multi-column liquid layouts - iPhone compatible">&laquo; Back to the CSS article</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a></p>
+
 	<h1>CakePHP Powered e-Commerce website!</h1>
-	<h2>No CSS hacks. SEO friendly. No Images. No JavaScript. Cross-browser &amp; iPhone compatible.</h2>
+	<h2>Choose your desired product!</h2>
 	<ul>
 		<li><a href="http://localhost/ecommerce/" class="active">Home <span>&nbsp;</span></a></li>
 		<li><a href="http://localhost/ecommerce/users/login">Users <span>Login!</span></a></li>
 		<?php if($session->check('Auth.User')){?>
 			<li><a href="http://localhost/ecommerce/users/index">Your <span>Account</span></a></li>
 		<?php }?>
-		<li><a href="http://matthewjamestaylor.com/blog/perfect-stacked-columns.htm">Stacked <span>columns</span></a></li>
 	</ul>
 	<div id="spinner" style="display: none; float:right;">
             <?php echo $html->image('ajax-loader.gif'); ?>
@@ -82,9 +81,10 @@
 				</div>
 				<br></br>
 				<?php echo $this->element('users/login_status'); ?>
-				<h2>Browser Compatibility</h2>
-				<p>This 3 column liquid Layout has been tested on the following browsers:</p>
-				<h3>iPhone &amp; iPod Touch</h3>
+				<br></br>
+				<h2>Ad space</h2>
+				<p>advertisement for sponsors</p>
+				
 				<?php ?>
 			
 				<!-- Column 3 end -->
@@ -94,7 +94,6 @@
 </div>
 <div id="footer">
 	<?php echo $html->link('Admin login', array('controller' => 'users', 'action' => 'admin_login', 'c' => $c, 'admin' => true));?>
-	<p>This page uses the <a href="http://matthewjamestaylor.com/blog/perfect-3-column.htm">Perfect 'Holy Grail' 3 Column Liquid Layout</a> by <a href="http://matthewjamestaylor.com">Matthew James Taylor</a>. View more <a href="http://matthewjamestaylor.com/blog/-website-layouts">website layouts</a> and <a href="http://matthewjamestaylor.com/blog/-web-design">web design articles</a>.</p>
 	
 	<?php echo $this->element('sql_dump');?>
 </div>

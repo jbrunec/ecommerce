@@ -22,7 +22,7 @@
 		<td><?php echo $product['Product']['id']; ?>&nbsp;</td>
 		<td><?php echo $product['Product']['pd_name']; ?>&nbsp;</td>
 		<td><?php echo $product['Product']['pd_qty']; ?>&nbsp;</td>
-		<td class="actions">
+		<td class="actions" id="stock_change">
 			<?php echo $form->input("Product.pd_qty", array('value' => $product['Product']['pd_qty'], 'label' => 'Change stock qty:')); ?>
 			<?php echo $form->end('Update stock'); ?><br>
 			<?php echo $this->Html->link('Edit', array('action' => 'admin_edit_product', $product['Product']['id'], 'admin' => true)); ?>

@@ -12,7 +12,7 @@ class OrdersController extends AppController{
 	
 	function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('index');
+		$this->Auth->allow('index','view');
 		
 		if($this->isAuthorized()){
 		    $this->Auth->allow('*');
@@ -116,7 +116,7 @@ class OrdersController extends AppController{
 	function get_all_user_orders($email = null){	    
 	    $this->paginate = array('conditions' => array('Order.od_payment_email' => $email), 'order' => 'Order.od_date DESC');
 	    $orders = $this->paginate();
-	    $totalSum = $this->Order->get_total_payed_orders_sum($orders, true);
+	    $totalSum = $this->Order->get_total_payed_orders_sum($orders);
 	    $this->set(compact('orders','totalSum'));
 	    
 	    
@@ -133,7 +133,7 @@ class OrdersController extends AppController{
 	//za view admin_get_all_orders, prikaze vsa narocila
 	function admin_get_all_orders(){
 	    //$orders = $this->Order->find('all');
-	    $this->paginate = array('limit' => 10, 'order' => 'Order.od_date ASC');
+	    $this->paginate = array('limit' => 10, 'order' => 'Order.od_date DESC');
 	    
 	    $this->set('orders', $this->paginate());
 	    
@@ -155,7 +155,7 @@ class OrdersController extends AppController{
 	
 	function admin_get_completed_orders(){
 	    $this->paginate = array('conditions' => array('Order.od_status' => 'Completed'));
-	    $total = $this->Order->get_total_payed_orders_sum();
+	    $total = $this->Order->get_total_payed_orders_sum(null,true);
 	    $this->set('orders', $this->paginate());
 	    $this->set('totalSum', $total);
 	}
@@ -164,22 +164,31 @@ class OrdersController extends AppController{
 	function admin_view($id = null){
 	    $order =  $this->Order->find('first', array('conditions' => array('Order.id' => $id)));
 	    $this->set(compact('order'));
+	    
+	    if(!empty($this->data)){
+	        $this->Order->id = $this->data['Order']['id'];
+	        $this->Order->saveField('od_status', $this->data['Order']['od_status']);
+	        
+	        $result = $this->Order->get_ordered_items($this->data['Order']['id']);
+	        
+	        //posiljanje emaila s statusom
+	        $this->set('orderedProducts',$result);
+	        $this->set('status', $this->data['Order']['od_status']);
+	        $this->MyEmail->sendOrderStatusEmail($this->data['Order']['od_payment_email']);
+	        $this->redirect($this->referer());
+	    }
+	    
 	}
 	
 	
 	function admin_order_report(){
 	    $time = new TimeHelper();
-	    
-	    
+    
 	    if(!empty($this->data)){
 	        //pr($this->data);
-	        if($this->data['Order']['option'] == 'today'){
+	        if(@$this->data['Order']['option'] == 'today'){
 	            $todayStart = mktime(0,0,0,date('m'),date('d'),date('Y'));
 	            
-	            pr(date('Y-m-d H:i:s',$todayStart));
-	            pr(date('H:i:s',time() - $todayStart));
-	            //die;
-	            //$this->paginate = array('conditions' => array('Order.od_date >=' => $todayStart));
 	            $this->paginate = array('conditions' => array($time->daysAsSql($todayStart, time(), 'Order.od_date')));
 	            
 	            $orders = $this->paginate();
@@ -192,7 +201,7 @@ class OrdersController extends AppController{
 	                $totalSum = $this->Order->get_total_payed_orders_sum($orders);            
 	            }
 	            $this->set('totalSum', $totalSum); 
-	        }elseif($this->data['Order']['option'] == 'yesterday'){
+	        }elseif(@$this->data['Order']['option'] == 'yesterday'){
 	            $yesterdayStart = mktime(0,0,0,date('m'),date('d')-1,date('Y'));
 	            $yesterdayEnd = mktime(23,59,0,date('m'),date('d')-1,date('Y'));
 	            //pr(date('Y-m-d H:i:s',$yesterdayStart));
@@ -210,6 +219,8 @@ class OrdersController extends AppController{
 	            $this->set('totalSum', $totalSum); 
 	            $this->set('orders',$orders);	            
     	        $this->set('totalNum', $countNum);
+	        }elseif($this->data['Order']['option'] == 'last week'){
+	            
 	        }else{
     	        $hour = $this->data['Order']['startDate']['hour'];
     	        $minute = $this->data['Order']['startDate']['min'];

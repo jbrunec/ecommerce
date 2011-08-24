@@ -96,8 +96,12 @@ class ProductsController extends AppController{
 	
 	
 	function admin_add_product(){
+	    
 		if(!empty($this->data)){
-		    if(!$this->Product->admin_upload_photo()){
+		    if($this->data['Product']['file']['error'] == 4){
+		        
+		    }
+		    if(!$this->Product->admin_upload_photo($this->data)){
 		        //$this->Product->invalidate('file','isUploaded');
 		        $this->Session->setFlash('Incorrect file type');
 		        //$this->render();
@@ -141,7 +145,7 @@ class ProductsController extends AppController{
 		    
 		    if(empty($this->data)){
 		        //$this->Product->invalidate('file','isUploaded');
-		        $this->Session->setFlash('Incorrect file type');
+		        $this->Session->setFlash('You must upload a product image');
 		        //$this->render();
 		    }else{
 		        //$this->data['Product']['pd_last_update'] = date('Y-m-d H:i:s', time());
@@ -186,12 +190,27 @@ class ProductsController extends AppController{
 	    
 	    //Saniramo html znake iz opisa izdelka
 	    $i=0;
-		foreach($data as $product){
-		    $data[$i]['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));
-		    $i++;
-		}
+	    
+    	    foreach($data as $product){
+                //$data = $data[$i]['Product']['pd_featured'];
+    		    $data[$i]['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));
+    		    $i++;
+    		}
+	    
+		
 		$this->set('products', $data);
 		
+		//tu nastavljamo ali bo produkt objavljen na prvi strani ali ne (pd_feature)
+		if(!empty($this->data)){		    
+		    $this->Product->id = $this->data['Product']['id'];		    
+		    $this->Product->saveField('pd_featured', $this->data['Product']['pd_featured']);
+		    if($this->data['Product']['pd_featured'] == 1){
+                $this->Session->setFlash('Product is now featured on the main page!'); 
+		    }else{
+                $this->Session->setFlash('Product has been un-featured!'); 
+		    }
+		    
+		}
 		
 	}
 	
@@ -255,25 +274,42 @@ class ProductsController extends AppController{
 	    
 	    if(!empty($this->data)){
 	        $path = WWW_ROOT.'files\\';
+	        //lokacija POSTanega fajla
 	        $xml = $this->data['Product']['file']['tmp_name'];
 	        $xmlName = $this->data['Product']['file']['name'];
 	        $file = new File($xml);
 	        $xmlContent = $file->read();
 	        $file->close();
 	        
+	        //shranjevanje XMLa na server 
 	        $file = new File($path.$xmlName, true);
 	        $file->write($xmlContent);
 	        $file->close();
 	        
+	        //branje XMLa v polje
 	        $parsed_xml = new Xml($path.$xmlName);
 	        $parsed_xml = Set::reverse($parsed_xml);
 	        
+	        //izvedba posodobitve nad produkti
 	        $this->Product->batch_xml_update($parsed_xml);
 	        $this->Session->setFlash('Xml update successful!'); 
-	    }
-	   
+	    }    
 	    
-	    
+	}
+	
+	function admin_feature_product($id = null){
+	    if (!$id) {
+			$this->Session->setFlash('Invalid id for a product');
+			$this->redirect(array('action'=>'admin_show_all_products'));
+		}
+		$this->Product->id = $this->data['Product']['id'];
+		    
+		if ($this->Product->saveField('featured', 1)) {
+			$this->Session->setFlash('Product was featured successfully!');
+			$this->redirect(array('action'=>'admin_show_all_products'));
+		}
+		$this->Session->setFlash('Product was not featured!');
+		$this->redirect(array('action' => 'admin_show_all_products'));
 	}
 	
 	

@@ -56,7 +56,7 @@
         		<td colspan="1"><?php echo $html->link('Checkout',"/orders/index/c:$c/step:1");?></td>
         	<?php } ?>
         	<td colspan="1"><?php echo '= '.Configure::read('Shop.currency').' '.$totalPrice;?></td>
-        	<td colspan="1"><?php echo $form->end('Update Cart');?></td>
+        	<td colspan="1"><?php echo $form->end();?></td>
         </tr>
         
         	

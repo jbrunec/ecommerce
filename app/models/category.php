@@ -84,60 +84,6 @@ class Category extends AppModel{
 			return $child;
 	}
 	
-	/*function formatCategories($categories, $parentId){
-		// $navCat stores all children categories
-		// of $parentId
-		$navCat = array();
-		
-		// expand only the categories with the same parent id
-		// all other remain compact
-		$ids = array();
-		foreach ($categories as $category) {
-			if ($category['Category']['cat_parent_id'] == $parentId) {
-				$navCat[] = $category;
-			}
-			
-			// save the ids for later use
-			$ids[$category['Category']['id']] = $category;
-		}	
-	
-		$tempParentId = $parentId;
-		
-		// keep looping until we found the 
-		// category where the parent id is 0
-		while ($tempParentId != 0) {
-			$parent    = array($ids[$tempParentId]);
-			$currentId = $parent[0]['id'];
-	
-			// get all categories on the same level as the parent
-			$tempParentId = $ids[$tempParentId]['cat_parent_id'];
-			foreach ($categories as $category) {
-			    // found one category on the same level as parent
-				// put in $parent if it's not already in it
-				if ($category['Category']['cat_parent_id'] == $tempParentId && !in_array($category, $parent)) {
-					$parent[] = $category;
-				}
-			}
-			
-			// sort the category alphabetically
-			array_multisort($parent);
-		
-			// merge parent and child
-			$n = count($parent);
-			$navCat2 = array();
-			for ($i = 0; $i < $n; $i++) {
-				$navCat2[] = $parent[$i];
-				if ($parent[$i]['id'] == $currentId) {
-					$navCat2 = array_merge($navCat2, $navCat);
-				}
-			}
-			
-			$navCat = $navCat2;
-		}
-	
-	
-		return $navCat;
-	}*/
 	
 }
 ?>

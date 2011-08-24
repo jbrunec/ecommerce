@@ -1,4 +1,4 @@
-<?php debug($c);?>
+<?php //debug($c);?>
 <?php 
 
 	$categories = $this->requestAction("/categories/menu/c:$c/");
@@ -12,13 +12,11 @@
 	}else{
 		$level = 2;
 	}
-	
-	
-	
+		
 	if($level == 2){
 	?>
-	<li style="background: red;"><?php 	
-	    echo $html->link('---'.$category['cat_name'], array('controller' => 'carts', 'action' => 'index/c:'.$category['id']));	
+	<li><?php 	
+	    echo $html->link('---'.$category['cat_name'], array('controller' => 'carts', 'action' => 'index/c:'.$category['id']), array('id' => 'subCategory'),null);	
 	?></li>
 	<?php }else{?>
 		<li>

@@ -33,28 +33,22 @@ class Order extends AppModel{
 	//shranjevanje narocila
 	function saveOrder($orderData, $session_id ,$user_id = null){
 		$time = new TimeHelper();
-		//shrani Order v orders table
-		//$orderData['Order']['od_shipping_cost'] = Configure::read();
+		//shrani Order v orders table	
 		$orderData['Order']['od_date'] = $time->format("Y-m-d H:i:s", time());
 		$orderData['Order']['od_payment_tax'] = 0.00;
-		
 		$this->save($orderData);
-		    
-		
-				
-		//shrani produkte v vmesno tabelo orders_products
+		    			
+		//pridobimo ID pravkar vnesenega narocila, za nadaljno manipulacijo
 		$order_id = $this->getInsertID();
-		
-		
-		//    pridobivanje IDjev produktov iz vozicka 
+				
+		//pridobivanje IDjev produktov iz vozicka 
 		if(!empty($user_id)){
 		    $result = $this->Product->Cart->getCartContent($session_id, $user_id);
 		}else{
 		    $result = $this->Product->Cart->getCartContent($session_id);
 		}
-		
-		
-		
+				
+		//shranjevanje IDjev produktov in narocene kolicine
 		$product_ids = array();
 		$orderQty = array();
 		$i = 0;		
@@ -63,7 +57,7 @@ class Order extends AppModel{
 		    $orderQty[$i] = $item['Cart']['ct_qty'];
 		    $i++;
 		}
-				
+		//tu shranimo podatke v vmesno tabelo (hack)
 		$this->addAssoc('Product', $product_ids, $order_id, $orderQty);
 		
 		
@@ -102,17 +96,16 @@ class Order extends AppModel{
 	
 	//funkcija za racunanje vsote vseh zakljucenih narocil
 	function get_total_payed_orders_sum($orders = null, $enforce = false){
-	    if(empty($orders) && $enforce = false){
+	    if(empty($orders)){
 	        $orders =  $this->find('all', array('conditions' => array('od_status' => 'Completed')));
-	    }elseif ($enforce){
-	        
 	    }
 	    
 	    $totalSum = 0.00;
 	    foreach($orders as $order){
-	        $totalSum += ($order['Order']['od_payment_total']);
+    	        $totalSum += ($order['Order']['od_payment_total']);
 	    }
 	    
+    
 	    return $totalSum;
 	}
 	

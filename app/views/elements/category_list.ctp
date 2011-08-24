@@ -18,6 +18,10 @@
     		//$this->ImageResizer->outputImage();
     	    
     		$title = substr($product['Product']['pd_name'], 0, 18);
+    		$string = strlen($product['Product']['pd_description']);
+    		$product['Product']['pd_description'] = substr($product['Product']['pd_description'], 0, 100);
+    		$product['Product']['pd_description'] = $product['Product']['pd_description'].' ...';
+    		//pr($string);
     		?>
     		<?php $product['Product']['pd_description'] = Sanitize::html($product['Product']['pd_description'], array('remove' => true));?>
               <li>
@@ -33,10 +37,11 @@
               	    <?php echo $product['Product']['pd_description'];?><br>
               		<span>
               			<em>Price:</em>
-              			<big><?php echo $product['Product']['pd_price'];?></big>
+              			<big><?php echo Configure::read('Shop.currency').'&nbsp;'.$product['Product']['pd_price'];?></big>
               		</span>
               	</p>
-              	<blockquote></blockquote>
+              	
+              	
               </li>
   	
     	<?php endforeach; ?>

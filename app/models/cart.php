@@ -129,7 +129,7 @@ class Cart extends AppModel{
 		$time = new TimeHelper();
 		foreach($cart as $item){
 			$this->data['Cart']['ct_qty'] = $item['ct_qty'];
-			$this->data['Cart']['ct_date'] = $time->format("Y-m-d H:i:s", $time->gmt());
+			$this->data['Cart']['ct_date'] = $time->format("Y-m-d H:i:s", time());
 			$this->id = $item['id'];
 			$this->save();
 		}
@@ -145,6 +145,7 @@ class Cart extends AppModel{
 		$this->deleteAll($delete_condition, false);
 	}
 	
+	//praznjenje kosarice
 	function emptyCart($cartId){
 		if($cartId){
 			$this->delete($cartId);

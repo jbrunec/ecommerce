@@ -17,11 +17,11 @@ a:hover {
 	text-decoration:none;
 }
 h1, h2, h3 {
-	margin:.8em 0 .2em 0;
+	margin:0;
 	padding:0;
 }
 p {
-	margin:.4em 0 .8em 0;
+	margin:0;
 	padding:0;
 }
 img {
@@ -166,7 +166,7 @@ dl {
 	width: 60%;
 }
 dl .altrow {
-	background: #e8edff;
+	background: #b9c9fe;
 }
 dt {
 	font-weight: bold;
@@ -682,7 +682,7 @@ div.error-message {
 	border-bottom: 1px solid #fff;
 	color: #669;
 	border-top: 1px solid #fff;
-	background: #e8edff url('table-images/gradback.png') repeat-x;
+	background: #e8edff url('img/gradback.png') repeat-x;
 }
 #gradient-style tfoot tr td
 {
@@ -775,6 +775,19 @@ form {
 	margin-right: 20px;
 	padding: 0;
 	width: 95%;
+}
+form#UserRegisterForm{
+	clear: both;
+	margin-right: 20px;
+	padding: 0;
+	width: 70%;	
+}
+form#UserRegisterForm div{
+	clear: both;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	padding: 0;
+	
 }
 fieldset {
 	border: 1px solid #ccc;
@@ -903,6 +916,14 @@ FEATURED PRODUCTS DIVS
 	margin-left: 1%;
 	float: left;	
 	width: 24%;	
+	height: 293px;
+	background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.2, rgb(185,201,254)),
+    color-stop(0.41, rgb(255,255,255))
+);
 }
 .featured li h3, .featured li p, .featured li h1{	
 	padding: 5px 5px 5px 15px;
@@ -917,15 +938,8 @@ FEATURED PRODUCTS DIVS
 }
 .featured li p{
 	/* background:#b9c9fe; */
-	background: #b9c9fe;
-	font-size:small;
-	background-image: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0.19, rgb(185,201,254)),
-    color-stop(0.59, rgb(255,255,255))
-);
+	font-size:small; 
+	
 	
 }
 .featured li h1 a{
@@ -940,6 +954,7 @@ FEATURED PRODUCTS DIVS
 }
 
 .featured li p span{
+	
 	position: relative;
 	display: block;
 	height: 1px;
@@ -948,13 +963,17 @@ FEATURED PRODUCTS DIVS
 	background: url("../img/dot_gray.gif") repeat-x;	
 }
 .featured li p span em{
+	
 	float: left;
+	
 	padding-bottom: 10px;	
 }
 .featured li p span big{
+	
 	color: red;
 	font-size: 1.6em;
 	float: right;
+	
 	padding-bottom: 10px;
 }
 

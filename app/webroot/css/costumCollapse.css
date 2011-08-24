@@ -802,6 +802,45 @@ form div {
 	padding: .5em;
 	vertical-align: text-top;
 }
+form#UserLoginForm {
+	clear: both;
+	margin-right: 20px;
+	padding: 0;
+	width: 70%;
+}
+form#UserLoginForm div{
+	clear: both;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 0;
+}
+
+div#elementsToOperateOn form {
+	clear: both;
+	margin-right: 20px;
+	padding: 0;
+	width: 70%;
+}
+div#elementsToOperateOn form div{
+	clear: both;
+	margin-bottom: 0.1em;
+	padding: .2em;
+	vertical-align: text-top;
+}
+
+div#elementsToOperateOn form input, textarea{
+	clear: both;
+	font-size: 80%;
+	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+	padding: 0.5%;
+	width: 50%;
+}
+div#elementsToOperateOn form input#chkSame{
+	font-size: 80%;
+	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+	padding: 0.5%;
+	width: 2%;
+}
 form .input {
 	color: #444;
 }
@@ -861,7 +900,7 @@ div.radio label {
 }
 input[type=submit] {
 	display: inline;
-	font-size: 110%;
+	font-size: 100%;
 	width: auto;
 }
 form .submit input[type=submit] {

@@ -27,6 +27,7 @@ class CartsController extends AppController{
 	    }
 	}
 	
+	
 	function addToCart(){
 		$result = $this->Cart->Product->findById($this->p);	
 		
@@ -38,16 +39,12 @@ class CartsController extends AppController{
 				$this->Session->setFlash('The product you requested is out of stock!');
 				$this->redirect(array('action' => 'index'));
 			}
-		}
-		
+		}		
 		//ce je user loginan se uporablja userov ID
-		if($this->Auth->user()){
-		     
+		if($this->Auth->user()){	     
     		$sessionData = $this->Cart->getCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
-    		if(empty($sessionData)){
-    		    
-    	        $this->Cart->addToCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
-    		
+    		if(empty($sessionData)){   		    
+    	        $this->Cart->addToCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));  		
     			$this->Session->setFlash('Product added to cart! -> through user ID / inserted');
     		}else{
     			$this->Cart->updateCart($this->p, $this->sid, $this->Session->read('Auth.User.id'));
@@ -56,18 +53,14 @@ class CartsController extends AppController{
     	//ce user ni prijavljen se uporablja sejni ID
 		}else{
 		    $sessionData = $this->Cart->getCart($this->p, $this->sid);
-    		if(empty($sessionData)){
-    		    
+    		if(empty($sessionData)){ 		    
     	        $this->Cart->addToCart($this->p, $this->sid);
-    		
     			$this->Session->setFlash('Product added to cart! -> through session ID / inserted');
     		}else{
     			$this->Cart->updateCart($this->p, $this->sid);
     			$this->Session->setFlash('Product added to cart! -> through session ID / updated');
     		}
-		}
-		
-		
+		}		
 		$this->Cart->cleanUp();
 		$this->redirect(array('controller' => 'carts', 'action' => "index/c:$this->c/p:$this->p"));
 	}

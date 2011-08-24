@@ -2,6 +2,7 @@
 <?php 
 //debug($cart);
 	$cartContents = $this->requestAction("/carts/getCartContent");
+	
 	//debug($cartContents);
 	if(!empty($cartContents) && is_array($cartContents)){
 		$total = 0;

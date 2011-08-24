@@ -52,6 +52,18 @@
 			<?php echo Configure::read('Shop.currency').' '.$order['Order']['od_payment_total']; ?>
 			&nbsp;
 		</dd>
+		<dt<?php if ($i % 2 == 0) echo $class;?>>Action:</dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
+			<?php 
+			    echo $form->create('Order');
+			    echo $form->hidden('Order.id', array('value' => $order['Order']['id']));
+			    echo $form->hidden('Order.od_payment_email', array('value' => $order['Order']['od_payment_email']));
+			    echo $form->input('Order.od_status', array('label' => 'change status:'));
+			    echo $form->end('change');
+			
+			?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
 <br>
@@ -79,3 +91,4 @@
 	<hr>
 <?php endforeach;?>
 </div>
+

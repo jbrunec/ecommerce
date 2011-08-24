@@ -20,13 +20,16 @@
 	padding: 8px 12px;
 	text-decoration: none;
 }
+#menu a#subCategory{
+	background: #717D7D;
+	
+}
+#menu a#subCategory:hover {
+	background: #b9c9fe
+}
 #menu a:hover {
 	background: #b9c9fe url("img/hover.gif") left center no-repeat;
 	color: black;
 	padding-bottom: 8px;
 }
 
-#menu li.alt {
-	background:red;
-	
-}
